@@ -1,7 +1,25 @@
 # EEB2 reunion
 
-## About the Project
+## Table of content
+- [About the project](#about-the-project)
+  * Screenshots
+  * Tech Stack
+  * Features
+  * Environment Variables
+- Getting started
+  * Prerequisits
+  * Run locally
+  * Deployment 
+  * Other commands
+- Roadmap
+- Contributing 
+- FAQ
+- License 
+- Contact
+- Acknowledgements
 
+
+## About the Project
 In 2025, it will be 20 years since we graduated from high school. This calls for celebrations!
 
 Some people started getting people together via a WhatsApp group, and this made me realise that we might need a more robust way of managing the RSVPs. We have all the names of the students in the Bac Book, all we are missing is their contact details, to reach out. 
