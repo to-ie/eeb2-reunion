@@ -2,7 +2,7 @@
 
 ## About the Project
 
-### :camera: Screenshots
+### Screenshots
 <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
 
 
