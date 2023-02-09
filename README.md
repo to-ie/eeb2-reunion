@@ -91,7 +91,7 @@ To deploy this project run
 * [x] Todo 1
 * [ ] Todo 2
 
-## :wave: Contributing
+## Contributing
 
 Contributions are always welcome!
 
@@ -112,7 +112,7 @@ Distributed under the [MIT License](https://choosealicense.com/licenses/mit/).
 
 Theo - toie@duck.com
 
-## :gem: Acknowledgements
+## Acknowledgements
 
 Useful resources and libraries that we have used in this project:
 
