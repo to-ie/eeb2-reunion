@@ -2,7 +2,14 @@
 
 ## About the Project
 
-This project aims to facilitate the organisation of our 20-year anniversary since we graduated from high school. Since we are dealing with many students scattered all around the globe, we need a mechanism to collect contact details for everyone, in order to invite them to the event. 
+In 2025, it will be 20 years since we graduated from high school. This calls for celebrations!
+
+Some people started getting people together via a WhatsApp group, and this made me realise that we might need a more robust way of managing the RSVPs. We have all the names of the students in the Bac Book, all we are missing is their contact details, to reach out. 
+
+This platform aims to:
+1. Spread the word about the event.
+2. Help collect contact details of past classmates.
+
 
 ### Screenshots
 <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
@@ -138,9 +145,6 @@ Contributions are always welcome! PRs are the simplest way.
 
 - Why?
   + It will be 20 years since we graduated, surely it's important to mark the day?
-
-- Who's behind this?
-  + Some people created a WhatsApp group to start bringing people together, and I thought it'd be a good idea to have some more robust mechanism to identify which students were not in it. It might help boost the numbers of participants too. 
 
 ## License
 
