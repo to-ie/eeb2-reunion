@@ -17,7 +17,7 @@ This platform aims to:
 ### Tech Stack
 
 <details>
-  <summary>Client</summary>
+  <summary>Web app</summary>
   <ul>
     <li><a href="https://www.typescriptlang.org/](https://flask.palletsprojects.com/en/2.2.x/">Python Flask</a></li>
     <li><a href="https://getbootstrap.com/docs/3.4/css/">Bootstrap CSS</a></li>
@@ -103,36 +103,37 @@ To deploy this project run
 
 ## Roadmap
 * [ ] Create the signup / login mechanism 
-	* [ ] Create the login module 
-	  * [ ] If the user is not already linked to a member of the guest list, ask the user to identify themselves. 
-	* [ ] Create signup / login / password reset module 
-	  * [ ] Link signup of user to guest in the guest list 
-	  * [ ] Make sure signup module is not subject to script injections 
-	  * [ ] Explore AWS Cognito 
+  * [ ] Create signup / login / password reset module 
+    * [ ] Link signup of user to guest in the guest list 
+    * [ ] Make sure signup module is not subject to script injections  / explore AWS Cognito 
+  * [ ] Create the login module 
+    * [ ] User categories: Admin / View only / Student / Other
+    * [ ] If the user is not already linked to a member of the guest list, ask the user to identify themselves. 
 * [ ] Create the header/menu structure with all pages (blank)
   * [ ] Homepage
     * [ ] Information about the event 
     * [ ] Count of guest list / users / RSVPs
     * [ ] Share (on Facebook, Instagram, email, etc.)
     * [ ] Invite to the WhatsApp group
+  * [ ] About the event
   * [ ] RSVP / Payment
     * [ ] Make sure the user is mapped to a guest in the guest list. If not, redirect to the right page 
     * [ ] Allow user to tentatively confirm presence by tick-box
     * [ ] Allow user to confirm the presence by payment.
     * [ ] [?] Allow +1s? How to manage additional guests?
 * [ ] Spread the word
-	* [ ] Show a list of guests that are not currently registered and allow user to send an email invite. 
-	* [ ] Allow user to send an invitation to users who are not part of the guest list (teachers, students who failed the previous year).
-	* [ ] Get in touch if the guest list is incomplete. 
+  * [ ] Show a list of guests that are not currently registered and allow user to send an email invite. 
+  * [ ] Allow user to send an invitation to users who are not part of the guest list (teachers, students who failed the previous year).
+  * [ ] Get in touch if the guest list is incomplete. 
 * [ ] Administration
-	* [ ] Guest list management
-		* [ ] Creation of new groups (class section, teacher, failed class, other) in the guest list 
-		* [ ] Creation of new guests in the guest list 
-		* [ ] Removal of guests in the guest list 
-	* [ ] User / RSVP / Payment management 
-		* [ ] Lists of users who have registered / RSVP'd / Paid
+  * [ ] Guest list management
+    * [ ] Creation of new groups (class section, teacher, failed class, other) in the guest list 
+    * [ ] Creation of new guests in the guest list 
+    * [ ] Removal of guests in the guest list 
+  * [ ] User / RSVP / Payment management 
+    * [ ] Lists of users who have registered / RSVP'd / Paid
 * [ ] Contact us
-	* [ ] Contact form
+    * [ ] Contact form
 
 **Other:** 
 * [ ] Organise the event (who?)
