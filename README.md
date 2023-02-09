@@ -2,21 +2,21 @@
 
 ## Table of content
 - [About the project](#about-the-project)
-  * Screenshots
-  * Tech Stack
-  * Features
-  * Environment Variables
-- Getting started
-  * Prerequisits
-  * Run locally
-  * Deployment 
-  * Other commands
-- Roadmap
-- Contributing 
-- FAQ
-- License 
-- Contact
-- Acknowledgements
+  * [Screenshots](#screenshots)
+  * [Tech Stack](#tech-stack)
+  * [Features](#features)
+  * [Environment Variables](#environment-variables)
+- [Getting started](#getting-started)
+  * [Prerequisits](#prerequisites)
+  * [Run locally](#run-locally)
+  * [Deployment](#deployment)
+  * [Other commands](#other-commands)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing) 
+- [FAQ](#faq)
+- [License](#license)
+- [Contact](#contact)
+- [Acknowledgements](#acknowledgements)
 
 
 ## About the Project
