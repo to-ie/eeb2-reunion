@@ -39,7 +39,7 @@ This platform aims to:
   - Share (on Facebook, Instagram, email, etc.)
   - Invite to the WhatsApp group
 - Signup
-  - Map users to members of the guest list  
+  - Map users to members of the guest list
 - Reset password 
 - Login 
 - RSVP / Payment 
@@ -55,7 +55,9 @@ This platform aims to:
 
 To run this project, you will need to add the following environment variables to your .env file.
 
-[TBC]
+```bash
+
+```
 
 ## Getting Started
 
@@ -64,7 +66,7 @@ To run this project, you will need to add the following environment variables to
 This project uses Yarn as package manager
 
 ```bash
- npm install --global yarn
+
 ```
 
 ### Run Locally
@@ -72,25 +74,25 @@ This project uses Yarn as package manager
 Clone the project
 
 ```bash
-  git clone [github ULR]
+  git clone https://github.com/to-ie/eeb2-reunion
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd eeb2-reunion
 ```
 
 Install dependencies
 
 ```bash
-  yarn install
+
 ```
 
 Start the server
 
 ```bash
-  yarn start
+
 ```
 
 ### Deployment
@@ -98,13 +100,20 @@ Start the server
 To deploy this project run
 
 ```bash
-  yarn deploy
+
+```
+
+### Other commands
+
+```bash
+
 ```
 
 ## Roadmap
 * [ ] Create the signup / login mechanism 
   * [ ] Create signup / login / password reset module 
-    * [ ] Link signup of user to guest in the guest list 
+    * [ ] Once a user signsup, map user to guest in the guest list.
+    * [ ] Then redirect user to 'Spread the word page'. 
     * [ ] Make sure signup module is not subject to script injections  / explore AWS Cognito 
   * [ ] Create the login module 
     * [ ] User categories: Admin / View only / Student / Other
@@ -140,7 +149,9 @@ To deploy this project run
 
 ## Contributing
 
-Contributions are always welcome! PRs are the simplest way. 
+Contributions are always welcome! Get in touch if you are not sure how you can help! 
+
+If you want to help out with the technical side of this project, pull requests are the simplest way.
 
 ## FAQ
 
