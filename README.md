@@ -46,6 +46,7 @@ This project aims to facilitate the organisation of our 20-year anniversary sinc
 ### Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
+
 [TBC]
 
 ## Getting Started
@@ -90,6 +91,11 @@ To deploy this project run
 
 ```bash
   yarn deploy
+```
+
+### Other useful commands
+```bash
+
 ```
 
 ## Roadmap
