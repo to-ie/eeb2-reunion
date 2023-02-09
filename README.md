@@ -29,6 +29,7 @@ This project aims to facilitate the organisation of our 20-year anniversary sinc
 - Homepage
   - Information about the event
   - Count of guest list / users / RSVPs
+  - Share (on Facebook, Instagram, email, etc.)
   - Invite to the WhatsApp group
 - Signup
   - Map users to members of the guest list  
@@ -45,7 +46,7 @@ This project aims to facilitate the organisation of our 20-year anniversary sinc
 
 ### Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to add the following environment variables to your .env file.
 
 [TBC]
 
@@ -93,11 +94,6 @@ To deploy this project run
   yarn deploy
 ```
 
-### Other useful commands
-```bash
-
-```
-
 ## Roadmap
 * [ ] Create the signup / login mechanism 
 	* [ ] Create the login module 
@@ -110,6 +106,7 @@ To deploy this project run
   * [ ] Homepage
     * [ ] Information about the event 
     * [ ] Count of guest list / users / RSVPs
+    * [ ] Share (on Facebook, Instagram, email, etc.)
     * [ ] Invite to the WhatsApp group
   * [ ] RSVP / Payment
     * [ ] Make sure the user is mapped to a guest in the guest list. If not, redirect to the right page 
@@ -130,8 +127,8 @@ To deploy this project run
 * [ ] Contact us
 	* [ ] Contact form
 
-Other: 
-* [ ] Organise the event 
+**Other:** 
+* [ ] Organise the event (who?)
 
 ## Contributing
 
@@ -142,8 +139,8 @@ Contributions are always welcome! PRs are the simplest way.
 - Why?
   + It will be 20 years since we graduated, surely it's important to mark the day?
 
-- Question 2
-  + Answer 2
+- Who's behind this?
+  + Some people created a WhatsApp group to start bringing people together, and I thought it'd be a good idea to have some more robust mechanism to identify which students were not in it. It might help boost the numbers of participants too. 
 
 ## License
 
