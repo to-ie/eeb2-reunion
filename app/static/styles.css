@@ -1,0 +1,36 @@
+body {
+  font-size: 17px !important;
+  line-height: 30px !important;
+}
+
+.navbar-brand{
+    background-color: #1e1e1e;
+    color: #fff !important;
+    padding: 6px 15px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+
+.login-button{
+    margin-left: 10px;
+}
+
+.rightalign{
+    justify-content: flex-end;
+
+}
+
+.col-left{
+    padding-left: 0px !important;
+}
+
+.badge-light{
+  color: #FFFFFF !important;
+  background-color: #1E1E1E33;
+  font-size: 13px;
+  padding: 2px 10px;
+  border-radius: 50px;
+}
+}

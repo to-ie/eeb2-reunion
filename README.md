@@ -18,8 +18,6 @@
 - [Contact](#contact)
 - [Acknowledgements](#acknowledgements)
 
-test
-
 ## About the Project
 In 2025, it will be 20 years since we graduated from high school. This calls for celebrations!
 
@@ -111,7 +109,7 @@ Install dependencies
 Start the server
 
 ```bash
-
+flask run
 ```
 
 ### Deployment
@@ -124,9 +122,16 @@ To deploy this project run
 
 ### Other commands
 
+Activate virtual environment
 ```bash
-
+source venv/bin/activate
 ```
+
+Run locally: 
+```
+flask run
+```
+
 
 ## Roadmap
 * [ ] Create the signup / login mechanism 
