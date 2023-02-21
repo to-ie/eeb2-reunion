@@ -5,13 +5,6 @@
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
             {{ form.email.label }}<br>
             {{ form.email(size=64) }}<br>
             {% for error in form.email.errors %}
@@ -32,28 +25,8 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        Tell us a bit more about yourself:
-        <p>
-            {{ form.firstname.label }}<br>
-            {{ form.firstname(size=32) }}<br>
-            {% for error in form.firstname.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.lastname.label }}<br>
-            {{ form.lastname(size=32) }}<br>
-            {% for error in form.firstname.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.section.label }}<br>
-            {{ form.section(size=32) }}<br>
-            {% for error in form.section.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
         <p>{{ form.submit() }}</p>
     </form>
+      <p>Already have an account? <a href="{{ url_for('login') }}">Click to login</a>.</p>
+
 {% endblock %}

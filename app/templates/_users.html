@@ -1,0 +1,7 @@
+<tr>
+    <td>{{ user.id }}</td>
+    <td><a href="#">{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td>{{ user.role }}</td>
+    <td><a class="nolinkdecoration" href="#">✏️</a> | <a class="nolinkdecoration" href="{{ url_for('toggleadmin', userid = user.id) }}">👔</a> | <a class="nolinkdecoration" href="{{ url_for('delete_user', userid=user.id) }}">🗑️</td>
+</tr>

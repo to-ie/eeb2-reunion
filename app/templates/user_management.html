@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>User management</h1>
+<br>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th></th>
+    </tr>
+
+{% for user in users %}
+    {% include '_users.html' %}
+{% endfor %}
+
+</table>
+
+{% endblock %}

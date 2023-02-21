@@ -47,9 +47,19 @@
                             Members area
                         </a>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('user', username=current_user.username) }}">Your profile</a></li>
                             <li><a class="dropdown-item" href="#">RSVP</a></li>
                             <li><a class="dropdown-item" href="#">Spread the word</a></li>
-                            <li><a class="dropdown-item" href="#">Administration</a></li>
+                            {% if current_user.role == "admin" %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="nav-header">Admin area</li>
+                            <li><a class="dropdown-item" href="{{ url_for('adminusermanagement') }}">User management</a></li>
+                            <li><a class="dropdown-item" href="#">Guest list management</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('adminsectionmanagement') }}">Sections management</a></li>
+                            <li><a class="dropdown-item" href="#">RSVPs management</a></li>
+                            {% else %}
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                         </ul>
                     </li>
