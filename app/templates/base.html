@@ -29,29 +29,48 @@
                         <a class="nav-link active" aria-current="page" href="/index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Get involved</a>
+                        <a class="nav-link" href="/about">About the event</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/involved">Get involved</a>
                     </li>
 
-                    <!-- <li class="nav-item dropdown">
+                    
+                    {% if current_user.is_anonymous %}
+                    <li>
+                        <a class="btn btn-outline-primary login-button" href="/login" role="button">Login</a>
+                        <a class="btn btn-primary" href="/register" role="button">Sign up</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown link
+                            Members area
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">RSVP</a></li>
                             <li><a class="dropdown-item" href="#">Spread the word</a></li>
                             <li><a class="dropdown-item" href="#">Administration</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                         </ul>
-                    </li> -->
-                    <li>
-                        <button type="button" class="btn btn-outline-primary login-button">Login</button>
-                        <button type="button" class="btn btn-primary">Sign up</button>
                     </li>
+                    {% endif %}
+                    
                 </ul>
             </div>
         </div>
     </nav>
 <br>
 <div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
     {% block content %}{% endblock %}
 </div>
 

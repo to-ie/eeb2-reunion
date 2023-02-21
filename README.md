@@ -132,6 +132,12 @@ Run locally:
 flask run
 ```
 
+Database migration:
+```
+flask db migrate -m "posts table"
+flask db upgrade
+```
+
 
 ## Roadmap
 * [ ] Create the signup / login mechanism 
@@ -195,5 +201,5 @@ Theo - toie@duck.com
 Useful resources and libraries that we have used in this project:
 
  - [Awesome Readme Template](https://github.com/Louis3797/awesome-readme-template)
-
+ - [Flask](https://flask.palletsprojects.com/en/2.2.x/)
 

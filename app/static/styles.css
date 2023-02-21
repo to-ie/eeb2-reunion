@@ -3,6 +3,11 @@ body {
   line-height: 30px !important;
 }
 
+h1{
+    font-size: 60px !important;
+    letter-spacing: -2px;
+}
+
 .navbar-brand{
     background-color: #1e1e1e;
     color: #fff !important;
