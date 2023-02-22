@@ -5,15 +5,13 @@
 <h1>Section management</h1>
 <br>
 
-<form action="" method="post" novalidate class="addsection">
+<form action="" method="post" novalidate >
     {{ form.hidden_tag() }}
-    <p>
-        {{ form.sectioninput.label }} {{ form.sectioninput(size=5)}}<br>
-        {% for error in form.sectioninput.errors %}
-        <span class="errormessageform" style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
+    <p> {{ form.sectioninput(size=5)}} {{ form.submit() }}</p>
+    
+    {% for error in form.sectioninput.errors %}
+    <span class="errormessageform" style="color: red;">[{{ error }}]</span>
+    {% endfor %}
 </form>
 
 <table class="table">

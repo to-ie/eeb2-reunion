@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm
+from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
 from app.models import User, Guest, Section
 
 
@@ -155,6 +155,37 @@ def user(username):
 #       TODO: 
 #       Style up the pages and error messages
 # 
+
+@app.route('/admin/guests', methods=['GET', 'POST'])
+@login_required
+def adminguestmanagement():
+    if current_user.role == 'admin':
+        guests = Guest.query.order_by(Guest.id.asc())
+        form = AddGuestForm()
+        if form.validate_on_submit():
+            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper())
+            db.session.add(g)
+            db.session.commit()
+            flash('Guest successfully added')
+            return redirect(url_for('adminguestmanagement'))
+    else: 
+        flash('This is a restricted area.')
+        return redirect(url_for('index'))
+    return render_template("guest_management.html", title='Guest management', guests=guests, form=form)
+
+
+@app.route('/admin/delete/guests/<guestid>', methods=['GET', 'POST'])
+@login_required
+def delete_guest(guestid):
+    currentguest = Guest.query.filter_by(id=guestid).first_or_404()
+    if current_user.role == 'admin':
+        db.session.delete(currentguest)
+        db.session.commit()
+        flash('Guest was deleted.')
+        return redirect(url_for('adminguestmanagement'))
+    else: 
+        flash('This is a restricted area.')
+        return redirect(url_for('index'))
 
 #
 # Guest list setup process:

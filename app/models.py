@@ -26,18 +26,18 @@ def load_user(id):
 
 class Guest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(64), index=True, unique=False)
-    lastname = db.Column(db.String(64), index=True, unique=False)
+    name = db.Column(db.String(64), index=True, unique=False)
     section = db.Column(db.String(64), index=True, unique=False)
     email = db.Column(db.String(120), index=True, unique=True)
     registered = db.Column(db.String(120), index=True, unique=False)
 
     def __repr__(self):
-        return '<Guest {}>'.format(self.firstname)
+        return '<Guest {}>'.format(self.name)
+
 
 class Section(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     section = db.Column(db.String(64), index=True, unique=True)
 
     def __repr__(self):
-        return '<Section {}>'.format(self.section)
+        return '{}'.format(self.section)

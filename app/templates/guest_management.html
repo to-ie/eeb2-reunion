@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Guest management</h1>
+<br>
+
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <table >
+    <tbody>
+        <tr>
+            <td class="guesttable"> 
+                <p>
+                    {{ form.guestname.label }} <br> 
+                    {{ form.guestname(size=10)}}<br>
+                    
+                </p>
+            </td>
+            <td class="guesttable">
+                <p>
+                    {{ form.section.label }} <br> 
+                    {{ form.section()}}<br>
+                    
+                </p>
+            </td>
+            <td class="guesttable">
+                <p>{{ form.submit() }}</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% for error in form.guestname.errors %}
+<span class="errormessageform" style="color: red;">[{{ error }}]</span>
+{% endfor %}
+
+{% for error in form.section.errors %}
+<span class="errormessageform" style="color: red;">[{{ error }}]</span>
+{% endfor %}
+<br>
+</form>
+
+
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Guest</th>
+        <th>Section</th>
+        <th></th>
+    </tr>
+
+{% for guest in guests %}
+    {% include '_guests.html' %}
+{% endfor %}
+
+</table>
+
+{% endblock %}

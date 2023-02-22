@@ -1,10 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
-from app.models import User
-from app.models import Guest
-from app.models import Section
-
+from app.models import User, Guest, Section
 
 class LoginForm(FlaskForm):
     username = StringField('Email address', validators=[DataRequired()])
@@ -41,4 +38,17 @@ class AddSectionForm(FlaskForm):
 
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')
+
+def fetch_section():      
+    return db.session.query(Section).all()
+
+class AddGuestForm(FlaskForm):
+    guestname = StringField('Name', validators=[DataRequired()])
+    # section = StringField('Section', validators=[DataRequired()])
+    section = SelectField(u'Section', choices = [], validators = [DataRequired()])
+    submit = SubmitField('Add guest')
+
+    def __init__(self):
+        super(AddGuestForm, self).__init__()
+        self.section.choices = Section.query.all()
 

@@ -1,0 +1,7 @@
+<tr>
+    <td>{{ guest.id }}</td>
+    <td>{{ guest.name }}</td>
+    <td>{{ guest.section }}</td>
+    <td><a class="nolinkdecoration alignright" href="{{ url_for('delete_guest', guestid=guest.id) }}">🗑️</td>
+
+</tr>
