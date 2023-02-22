@@ -2,7 +2,14 @@
 
 {% block content %}
     <h1>Your profile</h1>
-    <hr>
-    <b>Email address:</b> {{ user.username }}
-        
+<br>
+    <b>Name:</b> {{ user.name }} <br>
+    <b>Section:</b> {{ user.section }}<br>
+    <b>Email address:</b> {{ user.username }}<br>
+    <b>Description:</b> {{ user.role }}<br>
+    <b>RSVP'ed:</b> {{ user.rsvp }}<br>
+<br>
+
+  <a class="btn btn-primary" href="{{ url_for('selectrole', userid=current_user.id) }}" role="button">Edit your profile</a>
+
 {% endblock %}

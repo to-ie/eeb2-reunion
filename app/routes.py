@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
+from app.forms import selectRoleForm, selectSectionForm, selectNameForm
 from app.models import User, Guest, Section
 
 
@@ -44,7 +45,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.email.data.lower(), email=form.email.data.lower(), role="user")
+        user = User(username=form.email.data.lower(), name="", section="", email=form.email.data.lower(), role="",rsvp="")
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -89,7 +90,7 @@ def toggleadmin(userid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-@app.route('/admin/delete/user/<userid>', methods=['GET', 'POST'])
+@app.route('/admin/delete-user/<userid>', methods=['GET', 'POST'])
 @login_required
 def delete_user(userid):
     usertodelete = User.query.filter_by(id=userid).first_or_404()
@@ -97,6 +98,11 @@ def delete_user(userid):
         if usertodelete.role == 'admin':
             flash('You can not delete an admin.')
         else:
+            guestToClear = Guest.query.filter_by(email=usertodelete.email).first()
+            if guestToClear is not None:
+                guestToClear.email = ''
+                guestToClear.registered = 'no'
+                guestToClear.rsvp = 'no'
             db.session.delete(usertodelete)
             db.session.commit()
             flash('User was deleted.')
@@ -106,11 +112,7 @@ def delete_user(userid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-
-#
-#       TODO:
-#       Modify/Edit profiles by admins
-#
+#   TODO: Modify/Edit profiles by admins
 
 @app.route('/admin/sections', methods=['GET', 'POST'])
 @login_required
@@ -130,8 +132,7 @@ def adminsectionmanagement():
     return render_template("section_management.html", title='Section management', 
         sections=sections, form=form)
 
-
-@app.route('/admin/delete/section/<sectionid>', methods=['GET', 'POST'])
+@app.route('/admin/delete-section/<sectionid>', methods=['GET', 'POST'])
 @login_required
 def delete_section(sectionid):
     currentsection = Section.query.filter_by(id=sectionid).first_or_404()
@@ -144,17 +145,17 @@ def delete_section(sectionid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-
-@app.route('/user/<username>')
+@app.route('/user/<userid>')
 @login_required
-def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    return render_template('profile.html', user=user)
+def user(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    if str(current_user.id) == str(userid):
+        return render_template('profile.html', user=user)
+    else:
+        flash("You don't have permission to access this profile.")
+        return redirect(url_for('user', userid=current_user.id))      
 
-# 
-#       TODO: 
-#       Style up the pages and error messages
-# 
+#   TODO: Style up the pages and error messages
 
 @app.route('/admin/guests', methods=['GET', 'POST'])
 @login_required
@@ -163,18 +164,24 @@ def adminguestmanagement():
         guests = Guest.query.order_by(Guest.id.asc())
         form = AddGuestForm()
         if form.validate_on_submit():
-            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper())
-            db.session.add(g)
-            db.session.commit()
-            flash('Guest successfully added')
+            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper(), 
+                registered="no", rsvp="no")
+            gv = Guest.query.filter_by(name=g.name).first()
+            if gv is not None:
+                flash('Guest already exists')
+                return redirect(url_for('adminguestmanagement'))
+            else:
+                db.session.add(g)
+                db.session.commit()
+                flash('Guest successfully added')
             return redirect(url_for('adminguestmanagement'))
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
-    return render_template("guest_management.html", title='Guest management', guests=guests, form=form)
+    return render_template("guest_management.html", title='Guest list management', guests=guests, form=form)
 
 
-@app.route('/admin/delete/guests/<guestid>', methods=['GET', 'POST'])
+@app.route('/admin/delete-guest/<guestid>', methods=['GET', 'POST'])
 @login_required
 def delete_guest(guestid):
     currentguest = Guest.query.filter_by(id=guestid).first_or_404()
@@ -183,19 +190,74 @@ def delete_guest(guestid):
         db.session.commit()
         flash('Guest was deleted.')
         return redirect(url_for('adminguestmanagement'))
+
+    
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-#
-# Guest list setup process:
-# 1. Form to add a guest
-#       - Section to be picked up from drop-down (db) 
-# 2. List of guests added (as a table)
-# 3. User to be able to update profile based on guest list 
-#       - 'role' to be selected first (graduated, failed, teacher, other)
-#       - 'section' to be selected if role = graduated
-#       - 'name' and 'last name' to be picked, based on 'section' 
-# 4. If first name, last name and section are selected, update guest list with 
-#    email address and registered to be set as true
-# 
+
+@app.route('/edit-role/<userid>', methods=['GET', 'POST'])
+@login_required
+def selectrole(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = selectRoleForm()
+    if str(current_user.id) == str(userid):
+        if form.validate_on_submit():
+            if user.role == "admin":
+                return redirect(url_for('selectsection', userid=current_user.id))
+            else:
+                user.role = form.roleselect.data
+                db.session.commit()
+                if user.role == "I graduated in 2005":
+                    return redirect(url_for('selectsection', userid=current_user.id))
+                elif user.role == "I was friends with those who graduated in 2005":
+                    return redirect(url_for('user', userid=current_user.id))
+                    # TODO: Set a path for friends of graduates
+                elif user.role == "I was a teacher at the EEB2":
+                    #TODO: set a path for teachers
+                    return redirect(url_for('user', userid=current_user.id))
+                elif user.role == "Other":
+                    # TODO: Set a path for Other
+                    return redirect(url_for('user', userid=current_user.id))
+                return redirect(url_for('user', userid=current_user.id))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=current_user.id))
+    return render_template('select-role.html', user=user, form=form)
+
+@app.route('/edit-section/<userid>', methods=['GET', 'POST'])
+@login_required
+def selectsection(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = selectSectionForm()
+    if str(current_user.id) == str(userid):
+        if form.validate_on_submit():
+            user.section = form.sectionselect.data
+            db.session.commit()
+            return redirect(url_for('nameselection', userid=current_user.id))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=current_user.id))
+    return render_template('select-section.html', user=user, form=form)
+
+@app.route('/edit-name/<userid>', methods=['GET', 'POST'])
+@login_required
+def nameselection(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    currentsection = current_user.section
+    form = selectNameForm(currentsection)
+    if str(current_user.id) == str(userid):
+        if form.validate_on_submit():
+            user.name = form.nameselect.data
+            guest = Guest.query.filter_by(name=user.name).first_or_404()
+            guest.email = current_user.email
+            guest.registered = 'yes'
+            db.session.commit()
+            return redirect(url_for('user', userid=current_user.id))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=current_user.id))
+    return render_template('select-user.html', user=user, form=form)
+
+

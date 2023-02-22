@@ -44,7 +44,6 @@ def fetch_section():
 
 class AddGuestForm(FlaskForm):
     guestname = StringField('Name', validators=[DataRequired()])
-    # section = StringField('Section', validators=[DataRequired()])
     section = SelectField(u'Section', choices = [], validators = [DataRequired()])
     submit = SubmitField('Add guest')
 
@@ -52,3 +51,26 @@ class AddGuestForm(FlaskForm):
         super(AddGuestForm, self).__init__()
         self.section.choices = Section.query.all()
 
+class selectRoleForm(FlaskForm):
+    roleselect = SelectField(u'', choices = [(''),('I graduated in 2005'),
+        ('I was friends with those who graduated in 2005'),('I was a teacher at the EEB2'),
+        ('Other')], validators = [DataRequired()])
+    submit = SubmitField('Next')
+
+
+class selectSectionForm(FlaskForm):
+    sectionselect = SelectField(u'Section', choices = [], validators = [DataRequired()])
+    submit = SubmitField('Next')
+
+    def __init__(self):
+        super(selectSectionForm, self).__init__()
+        self.sectionselect.choices = Section.query.all()
+
+
+class selectNameForm(FlaskForm):
+    nameselect = SelectField(u'Name', choices = [], validators = [DataRequired()])
+    submit = SubmitField('Next')
+
+    def __init__(self, currentsection):
+        super(selectNameForm, self).__init__()
+        self.nameselect.choices = Guest.query.filter_by(section=currentsection).all()

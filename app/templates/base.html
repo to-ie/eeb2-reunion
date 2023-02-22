@@ -47,7 +47,7 @@
                             Members area
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('user', username=current_user.username) }}">Your profile</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user', userid=current_user.id) }}">Your profile</a></li>
                             <li><a class="dropdown-item" href="#">RSVP</a></li>
                             <li><a class="dropdown-item" href="#">Spread the word</a></li>
                             {% if current_user.role == "admin" %}

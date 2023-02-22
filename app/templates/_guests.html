@@ -2,6 +2,9 @@
     <td>{{ guest.id }}</td>
     <td>{{ guest.name }}</td>
     <td>{{ guest.section }}</td>
+    <td>{{ guest.email }}</td>
+    <td>{{ guest.registered }}</td>
+    <td>{{ guest.rsvp }}</td>
     <td><a class="nolinkdecoration alignright" href="{{ url_for('delete_guest', guestid=guest.id) }}">🗑️</td>
 
 </tr>
