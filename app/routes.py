@@ -100,7 +100,8 @@ def delete_user(userid):
         else:
             guestToClear = Guest.query.filter_by(email=usertodelete.email).first()
             if guestToClear is not None:
-                guestToClear.email = ''
+
+                guestToClear.email = None
                 guestToClear.registered = 'no'
                 guestToClear.rsvp = 'no'
             db.session.delete(usertodelete)
@@ -221,6 +222,14 @@ def selectrole(userid):
                     # TODO: Set a path for Other
                     return redirect(url_for('user', userid=current_user.id))
                 return redirect(url_for('user', userid=current_user.id))
+
+# BUG: If a user goes to RE-edit their profile and change their name, the app
+# crashes as the email is found twice in the Guest table.
+
+# TODO: Create an error page for when the app crashes. A 404 page will also be 
+# required
+
+
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
