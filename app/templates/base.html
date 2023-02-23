@@ -17,13 +17,12 @@
 
 </head>
 <body class="bd-example">
-    <nav class="navbar navbar-expand-lg" data-bs-theme="light">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg nav-container" data-bs-theme="light">
+        <div class="container navigation-container">
             <a class="navbar-brand" href="/index">EEB2 '05 Reunion</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse rightalign" id="navbarNavDropdown">
+
+            <!-- To delete - remove the medium menu and put all info on one page -->
+<!--             <div class="navbar-nav main-nav" id="main-nav">
                 <ul class="navbar-nav text">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/index">Home</a>
@@ -34,10 +33,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/involved">Get involved</a>
                     </li>
-
-                    
+                </ul>
+            </div>
+ -->            <div class="login-buttons">
+                <ul class="navbar-nav">
                     {% if current_user.is_anonymous %}
-                    <li>
+                    <li class="buttons-header">
                         <a class="btn btn-outline-primary login-button" href="/login" role="button">Login</a>
                         <a class="btn btn-primary" href="/register" role="button">Sign up</a>
                     </li>
