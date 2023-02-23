@@ -7,15 +7,14 @@ class LoginForm(FlaskForm):
     username = StringField('Email address', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign in')
+    submit = SubmitField('Login')
 
 class RegistrationForm(FlaskForm):
-    # username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+    submit = SubmitField('Sign up')
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data.lower()).first()
@@ -73,4 +72,4 @@ class selectNameForm(FlaskForm):
 
     def __init__(self, currentsection):
         super(selectNameForm, self).__init__()
-        self.nameselect.choices = Guest.query.filter_by(section=currentsection).all()
+        self.nameselect.choices = Guest.query.filter_by(email=None).filter_by(section=currentsection).all()

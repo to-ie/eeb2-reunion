@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<div class="title">
     <h1>Your profile</h1>
-<br>
+    <h4>Hello {% if current_user.name %}there {{ user.name }}.{% else %}stranger.{% endif %}     
+</h4>
+</div>
+
+<!-- <br>
     <b>Name:</b> {{ user.name }} <br>
     <b>Section:</b> {{ user.section }}<br>
     <b>Email address:</b> {{ user.username }}<br>
@@ -12,4 +18,70 @@
 
   <a class="btn btn-primary" href="{{ url_for('selectrole', userid=current_user.id) }}" role="button">Edit your profile</a>
 
+
+ -->
+
+<div class="container profile">
+  <div class="row align-items-start">
+    <div class="col-7">
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-start">
+
+                    <div class="col-6">
+                        <img class="placeholderimage" src="https://dummyimage.com/600x800/c2c2c2/fff.jpg&text=Profile+placeholder">
+                    </div>
+
+                    <div class="col-6">
+                        <br>
+                        <b>Name:</b> {{ user.name }} 
+                        <br>
+                        <b>Email address:</b> {{ user.username }}
+                        <hr>
+                        <b>Section:</b> {{ user.section }}
+                        <br>
+                        <b>Description:</b> {{ user.role }}
+                        <hr>
+                        <b>RSVP'ed:</b> {{ user.rsvp }}
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<!--     <div class="col-1">
+    </div> -->
+    <div class="col-5">
+        {% if current_user.name %}
+            <div class="alert alert-success" role="alert">
+                <h2>Whoop!!</h2>
+                <p>Your profile is complete, thank you. </p>
+                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 100%"></div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h2>Hey, you! Psst!</h2>
+                <p>Updating your profile helps us keep track of who we're missing. Could you take a second to tick a few boxes for us? Won't take a second!</p>
+                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%"></div>
+                </div>
+                <hr>
+                <a class="btn btn-primary" href="{{ url_for('selectrole', userid=current_user.id) }}" role="button">Complete your profile</a>
+            </div>
+        {% endif %}     
+            <div class="alert alert-secondary">
+                <h2>RSVP</h2>
+                <p>We're still in the process of organising the event. Therefore, RSVPs are not currently available. Be sure to check back here soon though!</p>
+            </div>
+      </div>
+    </div>
+
+
+
+
+</div>
 {% endblock %}

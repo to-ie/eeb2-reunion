@@ -13,12 +13,9 @@ def index():
     return render_template('index.html', title='Home')
 
 @app.route('/about')
+@login_required
 def about():
     return render_template('about.html', title='About')
-
-@app.route('/involved')
-def involved():
-    return render_template('get-involved.html', title='Get involved')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -34,6 +31,8 @@ def login():
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
+# TODO: Password reset functionality to build in
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -45,7 +44,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.email.data.lower(), name="", section="", email=form.email.data.lower(), role="",rsvp="")
+        user = User(username=form.email.data.lower(), name="", section="", email=form.email.data.lower(), role="",rsvp="Not yet")
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -157,6 +156,7 @@ def user(userid):
         return redirect(url_for('user', userid=current_user.id))      
 
 #   TODO: Style up the pages and error messages
+#   TODO: Remove blue boxwhen name is known.
 
 @app.route('/admin/guests', methods=['GET', 'POST'])
 @login_required
@@ -165,8 +165,7 @@ def adminguestmanagement():
         guests = Guest.query.order_by(Guest.id.asc())
         form = AddGuestForm()
         if form.validate_on_submit():
-            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper(), 
-                registered="no", rsvp="no")
+            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper(), registered="no", rsvp="no")
             gv = Guest.query.filter_by(name=g.name).first()
             if gv is not None:
                 flash('Guest already exists')
@@ -223,8 +222,7 @@ def selectrole(userid):
                     return redirect(url_for('user', userid=current_user.id))
                 return redirect(url_for('user', userid=current_user.id))
 
-# BUG: If a user goes to RE-edit their profile and change their name, the app
-# crashes as the email is found twice in the Guest table.
+# TODO: If user has a name, edit profile is not available. 
 
 # TODO: Create an error page for when the app crashes. A 404 page will also be 
 # required

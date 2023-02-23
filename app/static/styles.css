@@ -5,12 +5,35 @@ body {
   line-height: 30px !important;
 }
 
-h1{
+h1 {
     font-size: 70px !important;
     letter-spacing: -4px;
     text-align: center;
     font-weight: 800 !important;
     line-height: 75px !important;
+}
+
+h4 {
+    padding-bottom: 20px !important;
+    font-weight: 300 !important;
+    line-height: 35px !important;
+}
+
+.float-right{
+    float: right;
+}
+
+.float-left{
+    float: left;
+}
+
+.rightalign{
+    justify-content: flex-end;
+
+}
+
+.placeholderimage{
+    width: 100%;
 }
 
 /*NAVIGATION*/
@@ -44,20 +67,17 @@ h1{
 
 /*HOMEPAGE*/
 
-.homepage-title{
-    margin-bottom: 80px;
+.title{
+/*    margin-bottom: 80px;*/
 }
 
-.homepage-title h1{
+.title h1{
     margin-bottom: -20px !important;
 }
 
-.homepage-title h4{
-    padding-top: 40px;
-    padding-bottom: 20px;
-    text-align: center;
-    font-weight: 300;
-    line-height: 35px;
+.title h4{
+    padding-top: 40px !important;
+    text-align: center !important;
 }
 
 .buttons-home{
@@ -71,6 +91,25 @@ h1{
 
 .homepage-images img{
     width: 24%;
+}
+
+.homepage-images img:hover {
+  animation: shake 0.2s;
+/*    animation-iteration-count: infinite; */
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
 
 .homepage-image-1{
@@ -89,36 +128,145 @@ h1{
     transform: rotate(-11deg);
 }
 
-
-
 .homepage-band{
     background-color: #1e1e1e;
-    width: 100%;
-    position: absolute;
-    right: 0;
-    left: 0;
+    width: 100vw;
+    position: relative;
+    margin-left: -50vw;
+    left: 50%;
+    color: #fff;
+    padding: 40px 15%;
+    margin-top: -60px;
 }
 
 .homepage-band h2{ 
-    color: #FFF 
+    font-size: 40px;
+}
+
+.band-content{
+    display: flex;
+    margin-top: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1024px;
+}
+
+.band-title{
+    width: 40%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.band-stats{
+    width: 20%;
+    padding: 10px 20px;
+
+}
+
+.band-stats h3{
+    font-size: 45px;
+}
+
+.homepage-about{
+    padding: 40px 0px;
+}
+
+.list{
+  padding: 0;
+  margin: 0;
+}
+
+.tick{
+  background: url('/static/tick.png') no-repeat left top;
+  height: 35px;
+  padding-left: 45px;
+  list-style-type: none 
+}
+
+.unchecked{
+  background: url('/static/unchecked.png') no-repeat left top;
+  height: 35px;
+  padding-left: 45px;
+  list-style-type: none 
 }
 
 
+.homepage-spread{
+    background-color: #1e1e1e;
+    width: 100vw;
+    position: relative;
+    margin-left: -50vw;
+    left: 50%;
+    color: #fff;
+    padding: 40px 15%;
+    margin-top: 80px;    
+}
 
+.homepage-band h2{ 
+    font-size: 40px;
+}
+
+
+.homepage-spread h2{ 
+    font-size: 40px;
+}
+
+.spread-content{
+    margin-top: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1024px;
+}
+
+.spread-title{
+    width: 100%;
+    text-align: center;
+
+}
+
+.table-ways{
+    margin-top: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1024px;
+    display: inline-block;
+}
+
+.spread-ways{
+    width: 40%;
+    text-align: left;
+    font-size: 25px;
+    font-weight: 500;
+    padding: 20px 0;
+    border-bottom-style: solid;
+    border-color: #FFFFFF33;
+    margin-right: 50px;
+    border-width: 1px;
+}
+
+.no-bottom-line {
+    border-style: none !important;
+}
+
+.homepage-whatsapp{
+    padding: 80px;
+}
+
+.login-form{
+    width: 500px;
+    margin: 40px auto;
+}
+
+.alert-form{
+    display: inline-block;
+    margin-top: 10px;
+    width: 100%;
+}
 
 
 /*
 
 
-
-.login-button{
-    margin-left: 10px;
-}
-
-.rightalign{
-    justify-content: flex-end;
-
-}
 
 .col-left{
     padding-left: 0px !important;

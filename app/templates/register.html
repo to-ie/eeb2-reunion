@@ -1,32 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Register</h1>
+<div class="title">
+    <h1>Sign up</h1>
+    <h4>Howdy, it's great to have you here!</h4>
+</div>
+
+<div class="login-form">
     <form action="" method="post">
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=64) }}<br>
-            {% for error in form.email.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password2.label }}<br>
-            {{ form.password2(size=32) }}<br>
-            {% for error in form.password2.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
+        
+        {{ form.email.label (class_='form-label') }}<br>
+        {{ form.email(size=32, class_='form-control') }}<br>
+        {% for error in form.email.errors %}
+        <span class="alert alert-danger alert-form">[{{ error }}]</span>
+        {% endfor %}
+
+        {{ form.password.label (class_='form-label') }}<br>
+        {{ form.password(size=32, class_='form-control') }}<br>
+        {% for error in form.password.errors %}
+        <span class="alert alert-danger alert-form">[{{ error }}]</span>
+        {% endfor %}
+
+        {{ form.password2.label (class_='form-label') }}<br>
+        {{ form.password2(size=32, class_='form-control') }}<br>
+        {% for error in form.password2.errors %}
+        <span class="alert alert-danger alert-form">[{{ error }}]</span>
+        {% endfor %}
+
+        {{ form.submit(class_='btn btn-primary') }}
+
     </form>
-      <p>Already have an account? <a href="{{ url_for('login') }}">Click to login</a>.</p>
+    <br>
+    <div class="alert alert-light" role="alert">
+    Already have an account? <a href="{{ url_for('login') }}">Click to login</a>.
+    </div>
+</div>
 
 {% endblock %}

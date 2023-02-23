@@ -21,21 +21,7 @@
         <div class="container navigation-container">
             <a class="navbar-brand" href="/index">EEB2 '05 Reunion</a>
 
-            <!-- To delete - remove the medium menu and put all info on one page -->
-<!--             <div class="navbar-nav main-nav" id="main-nav">
-                <ul class="navbar-nav text">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About the event</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/involved">Get involved</a>
-                    </li>
-                </ul>
-            </div>
- -->            <div class="login-buttons">
+            <div class="login-buttons">
                 <ul class="navbar-nav">
                     {% if current_user.is_anonymous %}
                     <li class="buttons-header">
@@ -49,6 +35,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('user', userid=current_user.id) }}">Your profile</a></li>
+                            <li><a class="dropdown-item" href="/about">About the event</a></li>
                             <li><a class="dropdown-item" href="#">RSVP</a></li>
                             <li><a class="dropdown-item" href="#">Spread the word</a></li>
                             {% if current_user.role == "admin" %}
@@ -76,7 +63,7 @@
         {% if messages %}
         <ul>
             {% for message in messages %}
-            <li>{{ message }}</li>
+            <div class="alert alert-light" role="alert">{{ message }}</div>
             {% endfor %}
         </ul>
         {% endif %}
