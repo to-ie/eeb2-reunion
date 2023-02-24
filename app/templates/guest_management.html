@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="title">
-    <h1>Guest management</h1>
+    <h1>Guest management</h1> 
 </div>
 <br>
 
@@ -17,13 +17,13 @@
             <td class="guesttable"> 
                 <p>
                     {{ form.guestname.label (class_='form-label')}} <br> 
-                    {{ form.guestname(size=10, class_='form-control')}}<br>
+                    {{ form.guestname(size=10, class_='form-control')}}
                 </p>
             </td>
             <td class="guesttable">
                 <p>
                     {{ form.section.label (class_='form-label')}} <br> 
-                    {{ form.section(class_='form-select')}}<br>
+                    {{ form.section(class_='form-select')}}
                 </p>
             </td> 
             <td class="guesttable">
@@ -33,13 +33,10 @@
     </tbody>
 </table>
 {% for error in form.guestname.errors %}
-<span class="errormessageform" style="color: red;">[{{ error }}]</span>
-{% endfor %}
+<span class="alert alert-danger alert-form">[{{ error }}]</span>{% endfor %}
 
-{% for error in form.section.errors %}
-<span class="errormessageform" style="color: red;">[{{ error }}]</span>
-{% endfor %}
 <br>
+
 </form>
 
 <table class="table">

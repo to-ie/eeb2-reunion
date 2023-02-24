@@ -294,5 +294,6 @@ h4 {
 }
 
 .guesttable{
+    vertical-align: bottom;
     padding: 10px;
 }
