@@ -127,7 +127,7 @@ flask db upgrade
 * [x] Create the header/menu structure with all pages (blank)
   * [x] Homepage
     * [x] Count of guest list / users / RSVPs
-    * [ ] Share (on Facebook, Instagram, email, etc.)
+    * [x] Share (on Facebook, Instagram, email, etc.)
     * [x] Invite to the WhatsApp group
   * [x] About the event
   * [ ] RSVP / Payment
@@ -138,12 +138,16 @@ flask db upgrade
 * [ ] Spread the word
   * [ ] Show a list of guests that are not currently registered and allow user to send an email invite. 
   * [ ] Allow user to send an invitation to users who are not part of the guest list (teachers, students who failed the previous year).
-  * [ ] Get in touch if the guest list is incomplete. 
+  * [ ] Get in touch if the guest list is incomplete.
+* [ ] Reconnect with past friends
+  * [ ] create public profiles for users 
+  * [ ] Make users searchable
 * [ ] Administration
   * [x] Guest list management
     * [x] Creation of new guests in the guest list 
     * [x] Removal of guests in the guest list
     * [ ] Edit guests
+    * [ ] Edit users
   * [ ] User management
     * [ ] Lists of users who have registered / RSVP'd / Paid
   * [ ] RSVP / Payment management 
