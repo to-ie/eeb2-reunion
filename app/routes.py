@@ -129,7 +129,7 @@ def delete_user(userid):
 
 #   TODO: Modify/Edit profile function by admins
 
-@app.route('/admin/sections', methods=['GET'])
+@app.route('/admin/sections', methods=['GET', 'POST'])
 @login_required
 def adminsectionmanagement():
     if current_user.role == 'admin':
