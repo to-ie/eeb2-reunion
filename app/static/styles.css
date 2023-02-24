@@ -276,9 +276,6 @@ h4 {
 }
 
 
-
-
-
 .col-left{
     padding-left: 0px !important;
 }
@@ -296,4 +293,23 @@ h4 {
 .guesttable{
     vertical-align: bottom;
     padding: 10px;
+}
+
+.whatsapp{
+    color: #4CAF50;
+    text-decoration: none;
+    font-size: 40px;
+    letter-spacing: -3px;
+    font-weight: 500;
+    display: inline-block;
+    float:left;
+    margin-top: 20px;
+}
+
+.share-icons{
+    width: 410px;
+}
+
+.a2a_default_style a {
+  margin-bottom: 5px;
 }

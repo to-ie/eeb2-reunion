@@ -206,7 +206,7 @@ def delete_guest(guestid):
         return redirect(url_for('index'))
 
 
-@app.route('/edit-role/<userid>', methods=['GET', 'POST'])
+@app.route('/edit/role/<userid>', methods=['GET', 'POST'])
 @login_required
 def selectrole(userid):
     user = User.query.filter_by(id=userid).first_or_404()
@@ -241,7 +241,7 @@ def selectrole(userid):
         return redirect(url_for('user', userid=current_user.id))
     return render_template('select-role.html', user=user, form=form)
 
-@app.route('/edit-section/<userid>', methods=['GET', 'POST'])
+@app.route('/edit/section/<userid>', methods=['GET', 'POST'])
 @login_required
 def selectsection(userid):
     user = User.query.filter_by(id=userid).first_or_404()
@@ -256,7 +256,7 @@ def selectsection(userid):
         return redirect(url_for('user', userid=current_user.id))
     return render_template('select-section.html', user=user, form=form)
 
-@app.route('/edit-name/<userid>', methods=['GET', 'POST'])
+@app.route('/edit/name/<userid>', methods=['GET', 'POST'])
 @login_required
 def nameselection(userid):
     user = User.query.filter_by(id=userid).first_or_404()
