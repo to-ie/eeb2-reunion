@@ -5,7 +5,6 @@
   * [Screenshots](#screenshots)
   * [Tech Stack](#tech-stack)
   * [Features](#features)
-  * [Environment Variables](#environment-variables)
 - [Getting started](#getting-started)
   * [Prerequisits](#prerequisites)
   * [Run locally](#run-locally)
@@ -44,6 +43,7 @@ This platform aims to:
 <details>
 <summary>Database</summary>
   <ul>
+    <li><a href="https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/">Flask SQL Alchemy</a></li>
     <li><a href="https://www.mysql.com/">MySQL</a></li>
   </ul>
 </details>
@@ -68,23 +68,7 @@ This platform aims to:
   - User / RSVP management
 - Contact us
 
-### Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file.
-
-```bash
-
-```
-
 ## Getting Started
-
-### Prerequisites
-
-This project uses Yarn as package manager
-
-```bash
-
-```
 
 ### Run Locally
 
@@ -103,28 +87,17 @@ Go to the project directory
 Install dependencies
 
 ```bash
-
+pip install requirements.txt
 ```
-
-Start the server
-
-```bash
-flask run
-```
-
-### Deployment
-
-To deploy this project run
-
-```bash
-
-```
-
-### Other commands
 
 Activate virtual environment
+
 ```bash
+Linux:
 source venv/bin/activate
+
+Windows: 
+venv\Scripts\activate
 ```
 
 Run locally: 
@@ -132,6 +105,7 @@ Run locally:
 flask run
 ```
 
+### Other commands
 Database migration:
 ```
 flask db migrate -m "posts table"
@@ -140,17 +114,18 @@ flask db upgrade
 
 
 ## Roadmap
-* [ ] Create the signup / login mechanism 
-  * [ ] Create signup / login / password reset module 
-    * [x] Once a user signsup, map user to guest in the guest list.
-    * [ ] Then redirect user to 'Spread the word page'. 
+* [x] Create the signup / login mechanism 
+  * [x] Create signup / login 
+    * [x] Once a user signup, map user to guest in the guest list.
     * [ ] Make sure signup module is not subject to script injections  / explore AWS Cognito 
-  * [ ] Create the login module 
-    * [ ] User categories: Admin / View only / Student / Other
-    * [ ] If the user is not already linked to a member of the guest list, ask the user to identify themselves. 
+  * [ ] Create password reset module
+  * [x] Create the login module 
+    * [x] User categories: Admin / View only / Student / Other
+    * [x] If the user is not already linked to a member of the guest list, ask the user to identify themselves.
+    * [ ] Create routes for 'friends of graduates', 'teachers', 'other' 
 * [x] Create the header/menu structure with all pages (blank)
   * [x] Homepage
-    * [ ] Count of guest list / users / RSVPs
+    * [x] Count of guest list / users / RSVPs
     * [ ] Share (on Facebook, Instagram, email, etc.)
     * [x] Invite to the WhatsApp group
   * [x] About the event
@@ -164,17 +139,16 @@ flask db upgrade
   * [ ] Allow user to send an invitation to users who are not part of the guest list (teachers, students who failed the previous year).
   * [ ] Get in touch if the guest list is incomplete. 
 * [ ] Administration
-  * [ ] Guest list management
-    * [ ] Creation of new groups (class section, teacher, failed class, other) in the guest list 
-    * [ ] Creation of new guests in the guest list 
-    * [ ] Removal of guests in the guest list 
-  * [ ] User / RSVP / Payment management 
+  * [x] Guest list management
+    * [x] Creation of new guests in the guest list 
+    * [x] Removal of guests in the guest list
+    * [ ] Edit guests
+  * [ ] User management
     * [ ] Lists of users who have registered / RSVP'd / Paid
+  * [ ] RSVP / Payment management 
 * [ ] Contact us
     * [ ] Contact form
 
-
-**Future Features**
 * [ ] Countdown to event on home page and event page
 
 **Other:** 
