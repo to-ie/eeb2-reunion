@@ -73,3 +73,14 @@ class selectNameForm(FlaskForm):
     def __init__(self, currentsection):
         super(selectNameForm, self).__init__()
         self.nameselect.choices = Guest.query.filter_by(email=None).filter_by(section=currentsection).all()
+
+class editSocialLinksForm(FlaskForm):
+    facebook = StringField('Facebook', validators=[])
+    twitter = StringField('Twitter', validators=[])
+    instagram = StringField('Instagram', validators=[])
+    linkedin = StringField('LinkedIn', validators=[])
+    snapchat = StringField('Snapchat', validators=[])
+    reddit = StringField('Reddit', validators=[])
+    mastodon = StringField('Mastodon', validators=[])
+    tiktok = StringField('TikTok', validators=[])
+    submit = SubmitField('Save')

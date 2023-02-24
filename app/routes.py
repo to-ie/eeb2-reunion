@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
-from app.forms import selectRoleForm, selectSectionForm, selectNameForm
+from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSocialLinksForm
 from app.models import User, Guest, Section
 
 @app.route('/')
@@ -275,3 +275,40 @@ def nameselection(userid):
         return redirect(url_for('user', userid=current_user.id))
     return render_template('select-user.html', user=user, form=form)
 
+@app.route('/edit/social/<userid>', methods=['GET', 'POST'])
+@login_required
+def socialLinks(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = editSocialLinksForm()
+    if str(current_user.id) == str(userid):
+        if form.validate_on_submit():
+            user.facebook = form.facebook.data
+            user.twitter = form.twitter.data
+            user.instagram = form.instagram.data
+            user.linkedin = form.linkedin.data
+            user.snapchat = form.snapchat.data
+            user.reddit = form.reddit.data
+            user.mastodon = form.mastodon.data
+            user.tiktok = form.tiktok.data
+            db.session.commit()
+            return redirect(url_for('user', userid=current_user.id))
+        elif request.method == 'GET':
+            form.facebook.data = current_user.facebook
+            form.twitter.data = current_user.twitter
+            form.instagram.data = current_user.instagram
+            form.linkedin.data = current_user.linkedin
+            form.snapchat.data = current_user.snapchat
+            form.reddit.data = current_user.reddit
+            form.mastodon.data = current_user.mastodon
+            form.tiktok.data = current_user.tiktok
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=current_user.id))
+    return render_template('edit-social.html', user=user, form=form)
+
+
+
+
+
+
+# TODO: Pull the original value of the form when loading

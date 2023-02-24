@@ -13,6 +13,15 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(64), index=True, unique=False)
     rsvp = db.Column(db.String(64), index=True, unique=False)
 
+    facebook = db.Column(db.String(64), index=True, unique=False)
+    twitter = db.Column(db.String(64), index=True, unique=False)
+    instagram = db.Column(db.String(64), index=True, unique=False)
+    linkedin = db.Column(db.String(64), index=True, unique=False)
+    snapchat = db.Column(db.String(64), index=True, unique=False)
+    reddit = db.Column(db.String(64), index=True, unique=False)
+    mastodon = db.Column(db.String(64), index=True, unique=False)
+    tiktok = db.Column(db.String(64), index=True, unique=False)
+
     def __repr__(self):
         return '<User {}>'.format(self.email)
 

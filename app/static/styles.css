@@ -31,6 +31,12 @@ h4 {
     justify-content: flex-end;
 }
 
+.align-right{
+    margin-right: 0;
+    margin-left: auto;
+    display: table;
+}
+
 .aligniconsright{
     text-align: right;
 }
@@ -41,6 +47,10 @@ h4 {
 
 .full-height{
     min-height: 75vh;
+}
+
+.pushup{
+    margin-top:-20px !important;
 }
 
 
@@ -312,4 +322,27 @@ h4 {
 
 .a2a_default_style a {
   margin-bottom: 5px;
+}
+
+.editsociallinks {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+}
+
+.social-form{
+    margin: 40px auto;
+    width: 100%;
+}
+
+.socialinput{
+    width: 49%;
+    display: inline-block;
+    padding: 7px 12px;
+}
+
+.socialbutton{
+    text-align: center;
+    margin-top: 20px;
 }
