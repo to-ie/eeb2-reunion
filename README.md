@@ -142,19 +142,18 @@ flask db upgrade
 ## Roadmap
 * [ ] Create the signup / login mechanism 
   * [ ] Create signup / login / password reset module 
-    * [ ] Once a user signsup, map user to guest in the guest list.
+    * [x] Once a user signsup, map user to guest in the guest list.
     * [ ] Then redirect user to 'Spread the word page'. 
     * [ ] Make sure signup module is not subject to script injections  / explore AWS Cognito 
   * [ ] Create the login module 
     * [ ] User categories: Admin / View only / Student / Other
     * [ ] If the user is not already linked to a member of the guest list, ask the user to identify themselves. 
-* [ ] Create the header/menu structure with all pages (blank)
-  * [ ] Homepage
-    * [ ] Information about the event 
+* [x] Create the header/menu structure with all pages (blank)
+  * [x] Homepage
     * [ ] Count of guest list / users / RSVPs
     * [ ] Share (on Facebook, Instagram, email, etc.)
-    * [ ] Invite to the WhatsApp group
-  * [ ] About the event
+    * [x] Invite to the WhatsApp group
+  * [x] About the event
   * [ ] RSVP / Payment
     * [ ] Make sure the user is mapped to a guest in the guest list. If not, redirect to the right page 
     * [ ] Allow user to tentatively confirm presence by tick-box
@@ -173,6 +172,10 @@ flask db upgrade
     * [ ] Lists of users who have registered / RSVP'd / Paid
 * [ ] Contact us
     * [ ] Contact form
+
+
+**Future Features**
+* [ ] Countdown to event on home page and event page
 
 **Other:** 
 * [ ] Organise the event (who?)

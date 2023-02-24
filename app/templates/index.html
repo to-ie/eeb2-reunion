@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <div class="title">
   <h1>It's been nearly 20 years <br>since we graduated from the EEB2! 🤯</h1>
   <h4>
@@ -19,29 +18,24 @@
   <img class="homepage-image-4" src="https://dummyimage.com/600x800/c2c2c2/fff.jpg&text=placeholder+image">
 </div>
   
-<!-- TODO: round the corners of the images -->
-  
-
 <div class="homepage-band">
   <div class="band-content">
     <div class="band-title">
       <h2>Be part of the celebrations</h2>
       
-<!-- TODO: Make this bolder -->
-
     </div>
     <div class="band-stats">
-      <h3>254</h3>
+      <h3>{{ guestcount }}</h3>
       <p>graduated in 2005.</p> 
     </div>
 
     <div class="band-stats">
-      <h3>143</h3>
+      <h3>{{ usercount }}</h3>
       <p>have registered here. </p> 
     </div>
 
     <div class="band-stats">
-      <h3>24</h3>
+      <h3>{{ rsvpcount }}</h3>
       <p>have RSVP'ed. </p> 
     </div>
   </div>
@@ -49,8 +43,6 @@
 <!-- TODO: This need review when mobile optimizing -->
 
 </div>
-
-
 
 </div>
 <div class="container homepage-about">
@@ -139,7 +131,6 @@
   </div>
 
 <!-- TODO: This need review when mobile optimizing -->
-
 
 </div>
 

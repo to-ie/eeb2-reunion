@@ -1,20 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="title">
     <h1>Which section were you in?</h1>
-<br>
+    <h4>You should remember this one...</h4>
+</div>
+
+<div class="login-form">
     <form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-                <p>
-                    {{ form.sectionselect()}}<br>
-                </p>
-                <p>{{ form.submit() }}</p>
+        {{ form.hidden_tag() }}
+        {{ form.sectionselect(class_='form-select')}}
+        <br>
+        {{ form.submit(class_='btn btn-primary') }}
+        
+        {% for error in form.sectionselect.errors %}
+        
+        <span class="alert alert-danger alert-form">[{{ error }}]</span>
+        {% endfor %}
+    </form>
 
-{% for error in form.sectionselect.errors %}
-<span class="errormessageform" style="color: red;">[{{ error }}]</span>
-{% endfor %}
-
-</form>
-   
+</div>  
 
 {% endblock %}

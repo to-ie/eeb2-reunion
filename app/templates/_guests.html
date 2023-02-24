@@ -5,6 +5,5 @@
     <td>{{ guest.email }}</td>
     <td>{{ guest.registered }}</td>
     <td>{{ guest.rsvp }}</td>
-    <td><a class="nolinkdecoration alignright" href="{{ url_for('delete_guest', guestid=guest.id) }}">🗑️</td>
-
+    <td class="aligniconsright"><a class="nolinkdecoration" href="#">✏️</a> | <a class="nolinkdecoration" href="{{ url_for('delete_guest', guestid=guest.id) }}">🗑️</td>
 </tr>

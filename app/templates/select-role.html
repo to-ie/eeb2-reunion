@@ -1,21 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<div class="title">
     <h1>Tell us more about you</h1>
+    <h4>Let's start with a simple one..</h4>
+</div>
 
+<div class="login-form">
     <form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-                <p>
-                    {{ form.roleselect.label }} <br> 
-                    {{ form.roleselect()}}<br>
-                </p>
-                <p>{{ form.submit() }}</p>
+        {{ form.hidden_tag() }}
+        
+        {{ form.roleselect(class_='form-select')}}
+        <br>
+        {{ form.submit(class_='btn btn-primary') }}
 
-{% for error in form.roleselect.errors %}
-<span class="errormessageform" style="color: red;">[{{ error }}]</span>
-{% endfor %}
+        {% for error in form.roleselect.errors %}
+        <span class="alert alert-danger alert-form">[{{ error }}]</span>
+        {% endfor %}
 
-</form>
-   
+    </form>
+</div>   
 
 {% endblock %}

@@ -1,6 +1,5 @@
 <!doctype html>
 
-
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -38,6 +37,7 @@
                             <li><a class="dropdown-item" href="/about">About the event</a></li>
                             <li><a class="dropdown-item" href="#">RSVP</a></li>
                             <li><a class="dropdown-item" href="#">Spread the word</a></li>
+                            <li><a class="dropdown-item" href="#">Down memory lane</a></li>
                             {% if current_user.role == "admin" %}
                             <li><hr class="dropdown-divider"></li>
                             <li class="nav-header"><b>Admin area</b></li>
@@ -69,14 +69,16 @@
         {% endif %}
     {% endwith %}
 
-    {% block content %}{% endblock %}
+    <div class="full-height">
+        {% block content %}{% endblock %}
+    </div>
 </div>
-
 
 <div class="container text-center">
-<hr>
-Made with ♥️ in Dublin. 
-</div>
+    <br>
+    <hr>
+    Made with ♥️ in Dublin. 
+    </div>
 
 </body>
 </html>

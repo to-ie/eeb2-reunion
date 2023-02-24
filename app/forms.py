@@ -52,7 +52,7 @@ class AddGuestForm(FlaskForm):
 
 class selectRoleForm(FlaskForm):
     roleselect = SelectField(u'', choices = [(''),('I graduated in 2005'),
-        ('I was friends with those who graduated in 2005'),('I was a teacher at the EEB2'),
+        ('I was friends with people who graduated in 2005'),('I was a teacher at the EEB2'),
         ('Other')], validators = [DataRequired()])
     submit = SubmitField('Next')
 

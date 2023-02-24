@@ -6,11 +6,14 @@ from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, Ad
 from app.forms import selectRoleForm, selectSectionForm, selectNameForm
 from app.models import User, Guest, Section
 
-
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', title='Home')
+    guestcount = Guest.query.count()
+    usercount = Guest.query.filter_by(registered='yes').count()
+    rsvpcount = Guest.query.filter_by(rsvp='yes').count()
+    return render_template('index.html', title='Home',guestcount=guestcount, 
+        usercount=usercount,rsvpcount=rsvpcount)
 
 @app.route('/about')
 @login_required
@@ -20,7 +23,7 @@ def about():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('user',userid=current_user.id))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data.lower()).first()
@@ -28,7 +31,7 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('index'))
+        return redirect(url_for('user',userid=current_user.id))
     return render_template('login.html', title='Sign In', form=form)
 
 # TODO: Password reset functionality to build in
@@ -51,6 +54,18 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/user/<userid>')
+@login_required
+def user(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    if str(current_user.id) == str(userid):
+        return render_template('profile.html', user=user)
+    else:
+        flash("You don't have permission to access this profile.")
+        return redirect(url_for('user', userid=current_user.id))      
+
+#   TODO: Add social links and make them editable
 
 @app.route('/admin/users', methods=['GET'])
 @login_required
@@ -114,7 +129,7 @@ def delete_user(userid):
 
 #   TODO: Modify/Edit profile function by admins
 
-@app.route('/admin/sections', methods=['GET', 'POST'])
+@app.route('/admin/sections', methods=['GET'])
 @login_required
 def adminsectionmanagement():
     if current_user.role == 'admin':
@@ -145,21 +160,7 @@ def delete_section(sectionid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-@app.route('/user/<userid>')
-@login_required
-def user(userid):
-    user = User.query.filter_by(id=userid).first_or_404()
-    if str(current_user.id) == str(userid):
-        return render_template('profile.html', user=user)
-    else:
-        flash("You don't have permission to access this profile.")
-        return redirect(url_for('user', userid=current_user.id))      
-
-#   TODO: Style up the pages and error messages
-#   TODO: Remove blue boxwhen name is known.
-#   TODO: Add social links and make them editable
-
-@app.route('/admin/guests', methods=['GET', 'POST'])
+@app.route('/admin/guests', methods=['GET'])
 @login_required
 def adminguestmanagement():
     if current_user.role == 'admin':
@@ -183,6 +184,7 @@ def adminguestmanagement():
 
 #   TODO: Make it easy to clear guest email address
 #         When this is been done, we need to clear the name from the relevant user. 
+#
 #         Similarly, we need to be able to clear the name off a guest and clear the 
 #         email address from the guest. 
 
@@ -218,7 +220,7 @@ def selectrole(userid):
                 db.session.commit()
                 if user.role == "I graduated in 2005":
                     return redirect(url_for('selectsection', userid=current_user.id))
-                elif user.role == "I was friends with those who graduated in 2005":
+                elif user.role == "I was friends with people who graduated in 2005":
                     return redirect(url_for('user', userid=current_user.id))
                     # TODO: Set a path for friends of graduates
                 elif user.role == "I was a teacher at the EEB2":
@@ -229,11 +231,10 @@ def selectrole(userid):
                     return redirect(url_for('user', userid=current_user.id))
                 return redirect(url_for('user', userid=current_user.id))
 
-# TODO: If user has a name, edit profile is not available. 
+# TODO: Reset the complete user form
 
 # TODO: Create an error page for when the app crashes. A 404 page will also be 
-# required
-
+#       required
 
     else:
         flash("You can't edit someone else's profile!")
@@ -273,5 +274,4 @@ def nameselection(userid):
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
     return render_template('select-user.html', user=user, form=form)
-
 
