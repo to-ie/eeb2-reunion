@@ -85,12 +85,6 @@ Go to the project directory
   cd eeb2-reunion
 ```
 
-Install dependencies
-
-```bash
-pip install requirements.txt
-```
-
 Activate virtual environment
 
 ```bash
@@ -99,6 +93,12 @@ source venv/bin/activate
 
 Windows: 
 venv\Scripts\activate
+```
+
+Install dependencies
+
+```bash
+pip install requirements.txt
 ```
 
 Run locally: 
