@@ -16,18 +16,18 @@
         <tr>
             <td class="guesttable"> 
                 <p>
-                    {{ form.guestname.label }} <br> 
-                    {{ form.guestname(size=10)}}<br>
+                    {{ form.guestname.label (class_='form-label')}} <br> 
+                    {{ form.guestname(size=10, class_='form-control')}}<br>
                 </p>
             </td>
             <td class="guesttable">
                 <p>
-                    {{ form.section.label }} <br> 
-                    {{ form.section()}}<br>
+                    {{ form.section.label (class_='form-label')}} <br> 
+                    {{ form.section(class_='form-select')}}<br>
                 </p>
-            </td>
+            </td> 
             <td class="guesttable">
-                <p>{{ form.submit() }}</p>
+                <p>{{ form.submit(class_='btn btn-primary') }}</p>
             </td>
         </tr>
     </tbody>

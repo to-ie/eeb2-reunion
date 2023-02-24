@@ -43,6 +43,7 @@ h4 {
     min-height: 75vh;
 }
 
+
 /*NAVIGATION*/
 
 .nav-container{
@@ -293,6 +294,5 @@ h4 {
 }
 
 .guesttable{
-    vertical-align: bottom;
     padding: 10px;
 }
