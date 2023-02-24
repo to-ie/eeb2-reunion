@@ -112,7 +112,7 @@ def delete_user(userid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-#   TODO: Modify/Edit profiles by admins
+#   TODO: Modify/Edit profile function by admins
 
 @app.route('/admin/sections', methods=['GET', 'POST'])
 @login_required
@@ -157,6 +157,7 @@ def user(userid):
 
 #   TODO: Style up the pages and error messages
 #   TODO: Remove blue boxwhen name is known.
+#   TODO: Add social links and make them editable
 
 @app.route('/admin/guests', methods=['GET', 'POST'])
 @login_required
@@ -180,6 +181,12 @@ def adminguestmanagement():
         return redirect(url_for('index'))
     return render_template("guest_management.html", title='Guest list management', guests=guests, form=form)
 
+#   TODO: Make it easy to clear guest email address
+#         When this is been done, we need to clear the name from the relevant user. 
+#         Similarly, we need to be able to clear the name off a guest and clear the 
+#         email address from the guest. 
+
+#   TODO: Make it easy for admins to edit guests. 
 
 @app.route('/admin/delete-guest/<guestid>', methods=['GET', 'POST'])
 @login_required
