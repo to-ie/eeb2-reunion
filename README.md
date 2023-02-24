@@ -28,7 +28,7 @@ This platform aims to:
 
 
 ### Screenshots
-<img src="/static/screenshot.jpg" />
+<img src="[https://github.com/to-ie/eeb2-reunion/blob/main/app/static/screenshot.jpg?raw=true" />
 
 
 ### Tech Stack
