@@ -6,6 +6,10 @@ from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, Ad
 from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSocialLinksForm
 from app.models import User, Guest, Section
 
+#
+# PAGES
+#
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -20,10 +24,14 @@ def index():
 def about():
     return render_template('about.html', title='About')
 
+#
+# LOGIN
+#
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('user',userid=current_user.id))
+        return redirect(url_for('user',userid=userid))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data.lower()).first()
@@ -31,10 +39,12 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('user',userid=current_user.id))
+        return redirect(url_for('user',userid=userid))
     return render_template('login.html', title='Sign In', form=form)
 
 # TODO: Password reset functionality to build in
+# TODO: Create an error page for when the app crashes. A 404 page will also be required
+# TODO: Pull the original value of the form when loading - where needed (edit)
 
 @app.route('/logout')
 def logout():
@@ -55,17 +65,152 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+#
+# USER PRIVATE
+#
+
 @app.route('/user/<userid>')
 @login_required
 def user(userid):
     user = User.query.filter_by(id=userid).first_or_404()
-    if str(current_user.id) == str(userid):
+    if user.id == current_user.id :
         return render_template('profile.html', user=user)
     else:
         flash("You don't have permission to access this profile.")
-        return redirect(url_for('user', userid=current_user.id))      
+        return redirect(url_for('user', userid=userid))      
 
-#   TODO: Add social links and make them editable
+
+@app.route('/edit/role/<userid>', methods=['GET', 'POST'])
+@login_required
+def selectrole(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = selectRoleForm()
+    if user.id == current_user.id :
+        if form.validate_on_submit():
+            if user.role == "admin":
+                return redirect(url_for('selectsection', userid=userid))
+            else:
+                user.role = form.roleselect.data
+                db.session.commit()
+                if user.role == "I graduated in 2005":
+                    return redirect(url_for('selectsection', userid=userid))
+                elif user.role == "I was friends with people who graduated in 2005":
+                    return redirect(url_for('user', userid=userid))
+                    # TODO: Set a path for friends of graduates
+                elif user.role == "I was a teacher at the EEB2":
+                    #TODO: set a path for teachers
+                    return redirect(url_for('user', userid=userid))
+                elif user.role == "Other":
+                    # TODO: Set a path for Other
+                    return redirect(url_for('user', userid=userid))
+                return redirect(url_for('user', userid=userid))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=userid))
+    return render_template('select-role.html', user=user, form=form)
+
+# TODO: Pull the original value of the form when loading (cf line 171)
+
+
+@app.route('/edit/section/<userid>', methods=['GET', 'POST'])
+@login_required
+def selectsection(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = selectSectionForm()
+    if user.id == current_user.id :
+        if form.validate_on_submit():
+            user.section = form.sectionselect.data
+            db.session.commit()
+            return redirect(url_for('nameselection', userid=userid))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=userid))
+    return render_template('select-section.html', user=user, form=form)
+
+# TODO: Pull the original value of the form when loading (cf line 171)
+
+
+@app.route('/edit/name/<userid>', methods=['GET', 'POST'])
+@login_required
+def nameselection(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    currentsection = current_user.section
+    form = selectNameForm(currentsection)
+    if user.id == current_user.id :
+        if form.validate_on_submit():
+            user.name = form.nameselect.data
+            guest = Guest.query.filter_by(name=user.name).first_or_404()
+            guest.email = current_user.email
+            guest.registered = 'yes'
+            db.session.commit()
+            return redirect(url_for('user', userid=userid))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=userid))
+    return render_template('select-user.html', user=user, form=form)
+
+# TODO: Pull the original value of the form when loading (cf line 171)
+
+@app.route('/edit/social/<userid>', methods=['GET', 'POST'])
+@login_required
+def socialLinks(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = editSocialLinksForm()
+    if user.id == current_user.id :
+        if form.validate_on_submit():
+            user.facebook = form.facebook.data
+            user.twitter = form.twitter.data
+            user.instagram = form.instagram.data
+            user.linkedin = form.linkedin.data
+            user.snapchat = form.snapchat.data
+            user.reddit = form.reddit.data
+            user.mastodon = form.mastodon.data
+            user.tiktok = form.tiktok.data
+            db.session.commit()
+            return redirect(url_for('user', userid=userid))
+        elif request.method == 'GET':
+            form.facebook.data = current_user.facebook
+            form.twitter.data = current_user.twitter
+            form.instagram.data = current_user.instagram
+            form.linkedin.data = current_user.linkedin
+            form.snapchat.data = current_user.snapchat
+            form.reddit.data = current_user.reddit
+            form.mastodon.data = current_user.mastodon
+            form.tiktok.data = current_user.tiktok
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=userid))
+    return render_template('edit-social.html', user=user, form=form)
+
+@app.route('/edit/reset/<userid>', methods=['GET','POST'])
+@login_required
+def resetProfile(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    guestToReset= Guest.query.filter_by(email=user.email).first()
+
+    form = EmptyForm()
+    if user.id == current_user.id :
+        user.name = ''
+        user.section = ''
+        user.rsvp = 'Not yet'
+        if user.role != 'admin':
+            user.role = ''    
+        guestToReset.email=None
+        guestToReset.registered = 'no'
+        guestToReset.rsvp = 'no'
+        db.session.commit()
+        if current_user.id == 'admin':
+            return redirect(url_for('adminusermanagement'))
+        else:
+            return redirect(url_for('user', userid=userid))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=userid))
+    return redirect(url_for('user', userid=userid))
+
+#
+# ADMIN
+#
 
 @app.route('/admin/users', methods=['GET'])
 @login_required
@@ -104,7 +249,7 @@ def toggleadmin(userid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-@app.route('/admin/delete-user/<userid>', methods=['GET', 'POST'])
+@app.route('/admin/delete/user/<userid>', methods=['GET', 'POST'])
 @login_required
 def delete_user(userid):
     usertodelete = User.query.filter_by(id=userid).first_or_404()
@@ -114,7 +259,6 @@ def delete_user(userid):
         else:
             guestToClear = Guest.query.filter_by(email=usertodelete.email).first()
             if guestToClear is not None:
-
                 guestToClear.email = None
                 guestToClear.registered = 'no'
                 guestToClear.rsvp = 'no'
@@ -147,7 +291,7 @@ def adminsectionmanagement():
     return render_template("section_management.html", title='Section management', 
         sections=sections, form=form)
 
-@app.route('/admin/delete-section/<sectionid>', methods=['GET', 'POST'])
+@app.route('/admin/delete/section/<sectionid>', methods=['GET', 'POST'])
 @login_required
 def delete_section(sectionid):
     currentsection = Section.query.filter_by(id=sectionid).first_or_404()
@@ -190,125 +334,22 @@ def adminguestmanagement():
 
 #   TODO: Make it easy for admins to edit guests. 
 
-@app.route('/admin/delete-guest/<guestid>', methods=['GET', 'POST'])
+@app.route('/admin/delete/guest/<guestid>', methods=['GET', 'POST'])
 @login_required
 def delete_guest(guestid):
     currentguest = Guest.query.filter_by(id=guestid).first_or_404()
     if current_user.role == 'admin':
         db.session.delete(currentguest)
+        # TODO: If guest is deleted, user with the name associated needs to be reset
+        #       ie: you want to avoid having a user with the name of a deleted guest.
         db.session.commit()
         flash('Guest was deleted.')
         return redirect(url_for('adminguestmanagement'))
 
-    
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
 
-@app.route('/edit/role/<userid>', methods=['GET', 'POST'])
-@login_required
-def selectrole(userid):
-    user = User.query.filter_by(id=userid).first_or_404()
-    form = selectRoleForm()
-    if str(current_user.id) == str(userid):
-        if form.validate_on_submit():
-            if user.role == "admin":
-                return redirect(url_for('selectsection', userid=current_user.id))
-            else:
-                user.role = form.roleselect.data
-                db.session.commit()
-                if user.role == "I graduated in 2005":
-                    return redirect(url_for('selectsection', userid=current_user.id))
-                elif user.role == "I was friends with people who graduated in 2005":
-                    return redirect(url_for('user', userid=current_user.id))
-                    # TODO: Set a path for friends of graduates
-                elif user.role == "I was a teacher at the EEB2":
-                    #TODO: set a path for teachers
-                    return redirect(url_for('user', userid=current_user.id))
-                elif user.role == "Other":
-                    # TODO: Set a path for Other
-                    return redirect(url_for('user', userid=current_user.id))
-                return redirect(url_for('user', userid=current_user.id))
-
-# TODO: Reset the complete user form
-
-# TODO: Create an error page for when the app crashes. A 404 page will also be 
-#       required
-
-    else:
-        flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=current_user.id))
-    return render_template('select-role.html', user=user, form=form)
-
-@app.route('/edit/section/<userid>', methods=['GET', 'POST'])
-@login_required
-def selectsection(userid):
-    user = User.query.filter_by(id=userid).first_or_404()
-    form = selectSectionForm()
-    if str(current_user.id) == str(userid):
-        if form.validate_on_submit():
-            user.section = form.sectionselect.data
-            db.session.commit()
-            return redirect(url_for('nameselection', userid=current_user.id))
-    else:
-        flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=current_user.id))
-    return render_template('select-section.html', user=user, form=form)
-
-@app.route('/edit/name/<userid>', methods=['GET', 'POST'])
-@login_required
-def nameselection(userid):
-    user = User.query.filter_by(id=userid).first_or_404()
-    currentsection = current_user.section
-    form = selectNameForm(currentsection)
-    if str(current_user.id) == str(userid):
-        if form.validate_on_submit():
-            user.name = form.nameselect.data
-            guest = Guest.query.filter_by(name=user.name).first_or_404()
-            guest.email = current_user.email
-            guest.registered = 'yes'
-            db.session.commit()
-            return redirect(url_for('user', userid=current_user.id))
-    else:
-        flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=current_user.id))
-    return render_template('select-user.html', user=user, form=form)
-
-@app.route('/edit/social/<userid>', methods=['GET', 'POST'])
-@login_required
-def socialLinks(userid):
-    user = User.query.filter_by(id=userid).first_or_404()
-    form = editSocialLinksForm()
-    if str(current_user.id) == str(userid):
-        if form.validate_on_submit():
-            user.facebook = form.facebook.data
-            user.twitter = form.twitter.data
-            user.instagram = form.instagram.data
-            user.linkedin = form.linkedin.data
-            user.snapchat = form.snapchat.data
-            user.reddit = form.reddit.data
-            user.mastodon = form.mastodon.data
-            user.tiktok = form.tiktok.data
-            db.session.commit()
-            return redirect(url_for('user', userid=current_user.id))
-        elif request.method == 'GET':
-            form.facebook.data = current_user.facebook
-            form.twitter.data = current_user.twitter
-            form.instagram.data = current_user.instagram
-            form.linkedin.data = current_user.linkedin
-            form.snapchat.data = current_user.snapchat
-            form.reddit.data = current_user.reddit
-            form.mastodon.data = current_user.mastodon
-            form.tiktok.data = current_user.tiktok
-    else:
-        flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=current_user.id))
-    return render_template('edit-social.html', user=user, form=form)
 
 
-
-
-
-
-# TODO: Pull the original value of the form when loading

@@ -31,10 +31,8 @@
                         <hr>
                         <b>RSVP'ed:</b> {{ user.rsvp }}
                         <br>
-                        <!-- {% if user == current_user %} -->
-                        <p><a href="#" class="nolinkdecoration align-right">✏️</a></p>
-                        <!-- {% endif %} -->
-                        
+                        <p><a href="#" class="nolinkdecoration align-right edit-rsvp">✏️</a></p>
+
                         <hr>
                         <b>Social links:</b>
                         <br>
@@ -129,6 +127,7 @@
                 <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 100%"></div>
                 </div>
+                <a href="{{ url_for('resetProfile', userid=current_user.id) }}" class="resetprofile align-right"> Reset profile</a>
             </div>
         {% else %}
             <div class="alert alert-info">
