@@ -160,7 +160,7 @@ def delete_section(sectionid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-@app.route('/admin/guests', methods=['GET'])
+@app.route('/admin/guests', methods=['GET', 'POST'])
 @login_required
 def adminguestmanagement():
     if current_user.role == 'admin':
