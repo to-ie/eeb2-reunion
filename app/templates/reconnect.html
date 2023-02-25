@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="title">
+    <h1>Reconnect</h1>
+    <h4>Find long lost friends...</h4> 
+</div>
+<br>
+
+<table class="table">
+    <tr>
+        <th>Section</th>
+        <th>Name</th>
+        <th>RSVP'ed?</th>
+        <th> </th>
+    </tr>
+
+{% for guest in guests %}
+    {% include '_publicguests.html' %}
+{% endfor %}
+
+</table>
+
+{% endblock %}

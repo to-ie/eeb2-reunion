@@ -4,7 +4,21 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
 from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSocialLinksForm
+from app.forms import nameOther
 from app.models import User, Guest, Section
+
+
+# TODO:
+# make public/id
+# to be public 
+# Add link to user profile to see their public profile
+# and keep private via link visibility
+# ie: if guest has email, then show name with link. Else, don't.
+# make reconnect page on the back of it - with the filter to sections
+
+# TODO: Edit profiles for Admins
+
+# TODO: Create an error page for when the app crashes. A 404 page will also be required
 
 #
 # PAGES
@@ -31,7 +45,7 @@ def about():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('user',userid=userid))
+        return redirect(url_for('user',userid=current_user.id))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data.lower()).first()
@@ -39,12 +53,10 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('user',userid=userid))
+        return redirect(url_for('user',userid=current_user.id))
     return render_template('login.html', title='Sign In', form=form)
 
 # TODO: Password reset functionality to build in
-# TODO: Create an error page for when the app crashes. A 404 page will also be required
-# TODO: Pull the original value of the form when loading - where needed (edit)
 
 @app.route('/logout')
 def logout():
@@ -69,17 +81,21 @@ def register():
 # USER PRIVATE
 #
 
-@app.route('/user/<userid>')
+@app.route('/user/<userid>', methods=['GET'])
 @login_required
 def user(userid):
     user = User.query.filter_by(id=userid).first_or_404()
-    if user.id == current_user.id :
-        return render_template('profile.html', user=user)
-    else:
-        flash("You don't have permission to access this profile.")
-        return redirect(url_for('user', userid=userid))      
-
-
+    guest = Guest.query.filter_by(email=user.email).first()
+    if user.name:
+        if user.id == current_user.id :
+            return render_template('profile.html', user=user, userid=userid, guestid = guest.id)
+        else:
+            flash("You don't have permission to access this profile.")
+            return redirect(url_for('user', userid=userid))      
+    elif guest is None:
+        flash('Take a few seconds to complete your profile.')
+        return redirect(url_for('selectrole', userid=current_user.id))        
+    
 @app.route('/edit/role/<userid>', methods=['GET', 'POST'])
 @login_required
 def selectrole(userid):
@@ -88,29 +104,26 @@ def selectrole(userid):
     if user.id == current_user.id :
         if form.validate_on_submit():
             if user.role == "admin":
+                #TODO: Fix this - make it update the right user when admin
                 return redirect(url_for('selectsection', userid=userid))
             else:
                 user.role = form.roleselect.data
                 db.session.commit()
                 if user.role == "I graduated in 2005":
-                    return redirect(url_for('selectsection', userid=userid))
+                    return redirect(url_for('selectsection', userid=current_user.id))
                 elif user.role == "I was friends with people who graduated in 2005":
-                    return redirect(url_for('user', userid=userid))
-                    # TODO: Set a path for friends of graduates
+                    return redirect(url_for('nameother', userid=current_user.id))
                 elif user.role == "I was a teacher at the EEB2":
-                    #TODO: set a path for teachers
-                    return redirect(url_for('user', userid=userid))
+                    return redirect(url_for('nameother', userid=current_user.id))
                 elif user.role == "Other":
-                    # TODO: Set a path for Other
-                    return redirect(url_for('user', userid=userid))
-                return redirect(url_for('user', userid=userid))
+                    return redirect(url_for('nameother', userid=current_user.id))
+                return redirect(url_for('user', userid=current_user.id))
+        elif request.method == 'GET':
+            form.roleselect.data = current_user.role
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=userid))
     return render_template('select-role.html', user=user, form=form)
-
-# TODO: Pull the original value of the form when loading (cf line 171)
-
 
 @app.route('/edit/section/<userid>', methods=['GET', 'POST'])
 @login_required
@@ -122,13 +135,12 @@ def selectsection(userid):
             user.section = form.sectionselect.data
             db.session.commit()
             return redirect(url_for('nameselection', userid=userid))
+        elif request.method == 'GET':
+            form.sectionselect.data = current_user.section
     else:
         flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=userid))
+        return redirect(url_for('user', userid=current_user.id))
     return render_template('select-section.html', user=user, form=form)
-
-# TODO: Pull the original value of the form when loading (cf line 171)
-
 
 @app.route('/edit/name/<userid>', methods=['GET', 'POST'])
 @login_required
@@ -144,12 +156,27 @@ def nameselection(userid):
             guest.registered = 'yes'
             db.session.commit()
             return redirect(url_for('user', userid=userid))
+        elif request.method == 'GET':
+            form.nameselect.data = current_user.name
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=userid))
     return render_template('select-user.html', user=user, form=form)
 
-# TODO: Pull the original value of the form when loading (cf line 171)
+@app.route('/edit/other/<userid>', methods=['GET', 'POST'])
+@login_required
+def nameother(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = nameOther()
+    if user.id == current_user.id :
+        if form.validate_on_submit():
+            user.name = form.name.data
+            db.session.commit()
+            return redirect(url_for('user', userid=current_user.id))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=userid))
+    return render_template('name-other.html', user=user, form=form)
 
 @app.route('/edit/social/<userid>', methods=['GET', 'POST'])
 @login_required
@@ -179,7 +206,7 @@ def socialLinks(userid):
             form.tiktok.data = current_user.tiktok
     else:
         flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=userid))
+        return redirect(url_for('user', userid=current_user.id))
     return render_template('edit-social.html', user=user, form=form)
 
 @app.route('/edit/reset/<userid>', methods=['GET','POST'])
@@ -187,26 +214,53 @@ def socialLinks(userid):
 def resetProfile(userid):
     user = User.query.filter_by(id=userid).first_or_404()
     guestToReset= Guest.query.filter_by(email=user.email).first()
-
     form = EmptyForm()
     if user.id == current_user.id :
         user.name = ''
         user.section = ''
         user.rsvp = 'Not yet'
         if user.role != 'admin':
-            user.role = ''    
-        guestToReset.email=None
-        guestToReset.registered = 'no'
-        guestToReset.rsvp = 'no'
+            user.role = ''   
+        if guestToReset: 
+            guestToReset.email = None
+            guestToReset.registered = 'no'
+            guestToReset.rsvp = 'no'
+        user.facebook = ''
+        user.twitter = ''
+        user.instagram = ''
+        user.linkedin = ''
+        user.snapchat = ''
+        user.reddit = ''
+        user.mastodon = ''
+        user.tiktok = ''
         db.session.commit()
         if current_user.id == 'admin':
             return redirect(url_for('adminusermanagement'))
         else:
-            return redirect(url_for('user', userid=userid))
+            return redirect(url_for('user', userid=current_user.id))
     else:
         flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=userid))
-    return redirect(url_for('user', userid=userid))
+        return redirect(url_for('user', userid=current_user.id))
+    # return redirect(url_for('user', userid=userid))
+
+#
+# PUBLIC
+# 
+
+@app.route('/public/<guestid>', methods=['GET'])
+@login_required
+def public(guestid):
+    guest = Guest.query.filter_by(id=guestid).first()
+    user = User.query.filter_by(email=guest.email).first()
+
+    return render_template('public.html', guestid=guestid, user=user)
+
+@app.route('/reconnect', methods=['GET'])
+@login_required
+def reconnect():
+    guests = Guest.query.order_by(Guest.section.asc())
+
+    return render_template('reconnect.html', guests=guests)
 
 #
 # ADMIN
@@ -345,11 +399,6 @@ def delete_guest(guestid):
         db.session.commit()
         flash('Guest was deleted.')
         return redirect(url_for('adminguestmanagement'))
-
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
-
-
-
-

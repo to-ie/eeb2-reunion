@@ -1,0 +1,11 @@
+<tr>
+    <td>{{ guest.section }}</td>
+    <td>{{ guest.name }}</td>
+    <td>{{ guest.rsvp }}</td>
+    <td>{% if guest.email %}
+        <a href="{{ url_for('public', guestid=guest.id) }}" class="align-right"><span class="badge rounded-pill text-bg-primary">See public profile</span></a></td>
+        {% endif %}
+
+
+
+</tr>

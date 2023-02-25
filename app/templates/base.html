@@ -36,7 +36,7 @@
                             <li><a class="dropdown-item" href="{{ url_for('user', userid=current_user.id) }}">Your profile</a></li>
                             <li><a class="dropdown-item" href="/about">About the event</a></li>
                             <li><a class="dropdown-item" href="#">RSVP</a></li>
-                            <li><a class="dropdown-item" href="#">Spread the word</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('reconnect') }}">Reconnect</a></li>
                             <li><a class="dropdown-item" href="#">Down memory lane</a></li>
                             {% if current_user.role == "admin" %}
                             <li><hr class="dropdown-divider"></li>

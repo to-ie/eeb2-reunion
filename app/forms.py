@@ -68,7 +68,7 @@ class selectSectionForm(FlaskForm):
 
 class selectNameForm(FlaskForm):
     nameselect = SelectField(u'Name', choices = [], validators = [DataRequired()])
-    submit = SubmitField('Next')
+    submit = SubmitField('Save')
 
     def __init__(self, currentsection):
         super(selectNameForm, self).__init__()
@@ -84,3 +84,8 @@ class editSocialLinksForm(FlaskForm):
     mastodon = StringField('Mastodon', validators=[])
     tiktok = StringField('TikTok', validators=[])
     submit = SubmitField('Save')
+
+class nameOther(FlaskForm):
+    name = StringField('Your name', validators=[DataRequired()])
+    submit = SubmitField('Save')
+

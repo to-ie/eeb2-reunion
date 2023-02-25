@@ -326,9 +326,8 @@ h4 {
 
 .editsociallinks {
     position: absolute;
-    bottom: 0;
     right: 0;
-    margin: 20px;
+    margin: 0 20px 0 0;
 }
 
 .social-form{
@@ -348,7 +347,8 @@ h4 {
 }
 
 .resetprofile{
-    color: #198754;
+    color: #1E1E1E33;
+    text-decoration: none;
     font-size: 13px;
 }
 
