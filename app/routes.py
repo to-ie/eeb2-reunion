@@ -84,18 +84,20 @@ def register():
 @app.route('/user/<userid>', methods=['GET'])
 @login_required
 def user(userid):
-    user = User.query.filter_by(id=userid).first_or_404()
+    user = User.query.filter_by(id=userid).first()
     guest = Guest.query.filter_by(email=user.email).first()
     if user.name:
-        if user.id == current_user.id :
+        if guest is None and user.id == current_user.id:
+            return render_template('profile.html', user=user, userid=userid)
+        elif user.id == current_user.id :
             return render_template('profile.html', user=user, userid=userid, guestid = guest.id)
         else:
             flash("You don't have permission to access this profile.")
             return redirect(url_for('user', userid=userid))      
     elif guest is None:
         flash('Take a few seconds to complete your profile.')
-        return redirect(url_for('selectrole', userid=current_user.id))        
-    
+        return redirect(url_for('selectrole', userid=current_user.id))    
+
 @app.route('/edit/role/<userid>', methods=['GET', 'POST'])
 @login_required
 def selectrole(userid):
@@ -162,6 +164,9 @@ def nameselection(userid):
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=userid))
     return render_template('select-user.html', user=user, form=form)
+
+# Add check that the name is unique to avoid two people being called 'Paul'
+# I think this might be in place for the Graduates group already 
 
 @app.route('/edit/other/<userid>', methods=['GET', 'POST'])
 @login_required
@@ -259,8 +264,15 @@ def public(guestid):
 @login_required
 def reconnect():
     guests = Guest.query.order_by(Guest.section.asc())
+    
+    # sections = Section.query.order_by(Section.section.asc())
+    # return render_template('reconnect.html', guests=guests, sections=sections)
 
     return render_template('reconnect.html', guests=guests)
+
+# TODO: Make public profile for other types of people and show them in the reconnect table
+# TODO: Filter through the results of the table
+#    https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates
 
 #
 # ADMIN
