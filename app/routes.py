@@ -168,9 +168,6 @@ def nameselection(userid):
         return redirect(url_for('user', userid=current_user.id))
     return render_template('select-user.html', user=user, form=form)
 
-# Add check that the name is unique to avoid two people being called 'Paul'
-# I think this might be in place for the Graduates group already 
-
 @app.route('/edit/other/<userid>', methods=['GET', 'POST'])
 @login_required
 def nameother(userid):

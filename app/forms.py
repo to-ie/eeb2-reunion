@@ -89,3 +89,12 @@ class nameOther(FlaskForm):
     name = StringField('Your name', validators=[DataRequired()])
     submit = SubmitField('Save')
 
+    def validate_name(self, name):
+        user = User.query.filter_by(name=name.data.title()).first()
+        guest = Guest.query.filter_by(name=name.data.title()).first()
+        if user is not None:
+            raise ValidationError('Please use a different name.')
+        if guest is not None:
+            raise ValidationError('Please use a different name.')
+
+
