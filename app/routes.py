@@ -8,15 +8,6 @@ from app.forms import nameOther
 from app.models import User, Guest, Section
 
 
-# TODO:
-# make public/id
-# to be public 
-# Add link to user profile to see their public profile
-# and keep private via link visibility
-# ie: if guest has email, then show name with link. Else, don't.
-# make reconnect page on the back of it - with the filter to sections
-
-# TODO: Edit profiles for Admins
 
 # TODO: Create an error page for when the app crashes. A 404 page will also be required
 
@@ -94,23 +85,28 @@ def user(userid):
             return render_template('profile.html', user=user, userid=userid)
         elif user.id == current_user.id :
             return render_template('profile.html', user=user, userid=userid, guestid = guest.id)
+        elif guest is None and current_user.role == 'admin':
+            return render_template('profile.html', user=user, userid=userid)
+        elif current_user.role == 'admin' :
+            return render_template('profile.html', user=user, userid=userid, guestid = guest.id)
         else:
             flash("You don't have permission to access this profile.")
             return redirect(url_for('user', userid=current_user.id))      
     elif guest is None:
         flash('Take a few seconds to complete your profile.')
-        return redirect(url_for('selectrole', userid=current_user.id))    
+        return redirect(url_for('selectrole', userid=userid))    
 
 # TODO: Add old photo to the profile
 # TODO: Change the 'Yey, profile complete section'
 
+# TODO: Create profiles for non graduates
 
 @app.route('/edit/role/<userid>', methods=['GET', 'POST'])
 @login_required
 def selectrole(userid):
     user = User.query.filter_by(id=userid).first_or_404()
     form = selectRoleForm()
-    if user.id == current_user.id :
+    if user.id == current_user.id or current_user.role=='admin':
         if form.validate_on_submit():
             if user.role == "admin":
                 #TODO: Fix this - make it update the right user when admin
@@ -119,19 +115,19 @@ def selectrole(userid):
                 user.role = form.roleselect.data
                 db.session.commit()
                 if user.role == "I graduated in 2005":
-                    return redirect(url_for('selectsection', userid=current_user.id))
+                    return redirect(url_for('selectsection', userid=userid))
                 elif user.role == "I was friends with people who graduated in 2005":
-                    return redirect(url_for('nameother', userid=current_user.id))
+                    return redirect(url_for('nameother', userid=userid))
                 elif user.role == "I was a teacher at the EEB2":
-                    return redirect(url_for('nameother', userid=current_user.id))
+                    return redirect(url_for('nameother', userid=userid))
                 elif user.role == "Other":
-                    return redirect(url_for('nameother', userid=current_user.id))
-                return redirect(url_for('user', userid=current_user.id))
+                    return redirect(url_for('nameother', userid=userid))
+                return redirect(url_for('user', userid=userid))
         elif request.method == 'GET':
-            form.roleselect.data = current_user.role
+            form.roleselect.data = user.role
     else:
         flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=userid))
+        return redirect(url_for('user', userid=current_user.id))
     return render_template('select-role.html', user=user, form=form)
 
 @app.route('/edit/section/<userid>', methods=['GET', 'POST'])
@@ -139,13 +135,13 @@ def selectrole(userid):
 def selectsection(userid):
     user = User.query.filter_by(id=userid).first_or_404()
     form = selectSectionForm()
-    if user.id == current_user.id :
+    if user.id == current_user.id or current_user.role=='admin':
         if form.validate_on_submit():
             user.section = form.sectionselect.data
             db.session.commit()
             return redirect(url_for('nameselection', userid=userid))
         elif request.method == 'GET':
-            form.sectionselect.data = current_user.section
+            form.sectionselect.data = user.section
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
@@ -155,21 +151,21 @@ def selectsection(userid):
 @login_required
 def nameselection(userid):
     user = User.query.filter_by(id=userid).first_or_404()
-    currentsection = current_user.section
+    currentsection = user.section
     form = selectNameForm(currentsection)
-    if user.id == current_user.id :
+    if user.id == current_user.id or current_user.role=='admin':
         if form.validate_on_submit():
             user.name = form.nameselect.data
             guest = Guest.query.filter_by(name=user.name).first_or_404()
-            guest.email = current_user.email
+            guest.email = user.email
             guest.registered = 'yes'
             db.session.commit()
             return redirect(url_for('user', userid=userid))
         elif request.method == 'GET':
-            form.nameselect.data = current_user.name
+            form.nameselect.data = user.name
     else:
         flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=userid))
+        return redirect(url_for('user', userid=current_user.id))
     return render_template('select-user.html', user=user, form=form)
 
 # Add check that the name is unique to avoid two people being called 'Paul'
@@ -180,14 +176,14 @@ def nameselection(userid):
 def nameother(userid):
     user = User.query.filter_by(id=userid).first_or_404()
     form = nameOther()
-    if user.id == current_user.id :
+    if user.id == current_user.id or current_user.role=='admin':
         if form.validate_on_submit():
             user.name = form.name.data
             db.session.commit()
-            return redirect(url_for('user', userid=current_user.id))
+            return redirect(url_for('user', userid=userid))
     else:
         flash("You can't edit someone else's profile!")
-        return redirect(url_for('user', userid=userid))
+        return redirect(url_for('user', userid=current_user))
     return render_template('name-other.html', user=user, form=form)
 
 @app.route('/edit/social/<userid>', methods=['GET', 'POST'])
@@ -195,7 +191,7 @@ def nameother(userid):
 def socialLinks(userid):
     user = User.query.filter_by(id=userid).first_or_404()
     form = editSocialLinksForm()
-    if user.id == current_user.id :
+    if user.id == current_user.id or current_user.role=='admin':
         if form.validate_on_submit():
             user.facebook = form.facebook.data
             user.twitter = form.twitter.data
@@ -208,14 +204,14 @@ def socialLinks(userid):
             db.session.commit()
             return redirect(url_for('user', userid=userid))
         elif request.method == 'GET':
-            form.facebook.data = current_user.facebook
-            form.twitter.data = current_user.twitter
-            form.instagram.data = current_user.instagram
-            form.linkedin.data = current_user.linkedin
-            form.snapchat.data = current_user.snapchat
-            form.reddit.data = current_user.reddit
-            form.mastodon.data = current_user.mastodon
-            form.tiktok.data = current_user.tiktok
+            form.facebook.data = user.facebook
+            form.twitter.data = user.twitter
+            form.instagram.data = user.instagram
+            form.linkedin.data = user.linkedin
+            form.snapchat.data = user.snapchat
+            form.reddit.data = user.reddit
+            form.mastodon.data = user.mastodon
+            form.tiktok.data = user.tiktok
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
@@ -227,11 +223,13 @@ def resetProfile(userid):
     user = User.query.filter_by(id=userid).first_or_404()
     guestToReset= Guest.query.filter_by(email=user.email).first()
     form = EmptyForm()
-    if user.id == current_user.id :
+    if user.id == current_user.id or current_user.role=='admin':
         user.name = ''
         user.section = ''
         user.rsvp = 'Not yet'
-        if user.role != 'admin':
+        if user.role == 'admin':
+            user.role = 'admin'   
+        else:
             user.role = ''   
         if guestToReset: 
             guestToReset.email = None
@@ -249,7 +247,7 @@ def resetProfile(userid):
         if current_user.id == 'admin':
             return redirect(url_for('adminusermanagement'))
         else:
-            return redirect(url_for('user', userid=current_user.id))
+            return redirect(url_for('user', userid=userid))
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
