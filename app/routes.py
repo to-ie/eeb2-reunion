@@ -29,10 +29,11 @@ def index():
 @app.route('/about')
 @login_required
 def about():
-    return render_template('about.html', title='About')
-
-# TODO: Add stats to this page - how many guests, how many registered, etc.
-
+    guestcount = Guest.query.count()
+    usercount = Guest.query.filter_by(registered='yes').count()
+    rsvpcount = Guest.query.filter_by(rsvp='yes').count()
+    return render_template('about.html', title='About', guestcount=guestcount, 
+        usercount=usercount,rsvpcount=rsvpcount)
 
 #
 # LOGIN
