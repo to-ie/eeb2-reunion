@@ -7,11 +7,8 @@ from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSoc
 from app.forms import nameOther
 from app.models import User, Guest, Section
 
-
-
 # TODO: Create an error page for when the app crashes. + send email to admin 
 # will need to wait till emails are working.
-
 
 #
 # PAGES
@@ -435,21 +432,16 @@ def resetGuest(guestid):
 @app.route('/admin/delete/guest/<guestid>', methods=['GET', 'POST'])
 @login_required
 def delete_guest(guestid):
-    currentguest = Guest.query.filter_by(id=guestid).first_or_404()
-    user = User.query.filter_by(email=currentguest.email).first_or_404()
+    currentguest = Guest.query.filter_by(id=guestid).first()
+    user = User.query.filter_by(email=currentguest.email).first()
     if current_user.role == 'admin':
         if user:
             user.name = ''
             user.section = ''
         db.session.delete(currentguest)
-        # TODO: If guest is deleted, user with the name associated needs to be reset
-        #       ie: you want to avoid having a user with the name of a deleted guest.
         db.session.commit()
         flash('Guest was deleted.')
         return redirect(url_for('adminguestmanagement'))
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
-
-
-

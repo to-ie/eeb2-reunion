@@ -48,7 +48,7 @@ class AddGuestForm(FlaskForm):
 
     def __init__(self):
         super(AddGuestForm, self).__init__()
-        self.section.choices = Section.query.all()
+        self.section.choices = Section.query.order_by(Section.section.asc()).all()
 
 class selectRoleForm(FlaskForm):
     roleselect = SelectField(u'', choices = [(''),('I graduated in 2005'),
@@ -63,7 +63,7 @@ class selectSectionForm(FlaskForm):
 
     def __init__(self):
         super(selectSectionForm, self).__init__()
-        self.sectionselect.choices = Section.query.all()
+        self.sectionselect.choices = Section.query.order_by(Section.section.asc()).all()
 
 
 class selectNameForm(FlaskForm):
@@ -72,7 +72,7 @@ class selectNameForm(FlaskForm):
 
     def __init__(self, currentsection):
         super(selectNameForm, self).__init__()
-        self.nameselect.choices = Guest.query.filter_by(email=None).filter_by(section=currentsection).all()
+        self.nameselect.choices = Guest.query.filter_by(email=None).filter_by(section=currentsection).order_by(Guest.name.asc()).all()
 
 class editSocialLinksForm(FlaskForm):
     facebook = StringField('Facebook', validators=[])
@@ -96,5 +96,3 @@ class nameOther(FlaskForm):
             raise ValidationError('Please use a different name.')
         if guest is not None:
             raise ValidationError('Please use a different name.')
-
-
