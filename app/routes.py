@@ -386,6 +386,10 @@ def delete_section(sectionid):
 def adminguestmanagement():
     if current_user.role == 'admin':
         guests = Guest.query.order_by(Guest.id.asc())
+        friends = User.query.filter_by(role='I was friends with people who graduated in 2005').order_by(User.name.asc())
+        teachers = User.query.filter_by(role='I was a teacher at the EEB2').order_by(User.name.asc())
+        others = User.query.filter_by(role='Other').order_by(User.name.asc())
+
         form = AddGuestForm()
         if form.validate_on_submit():
             g = Guest(name=form.guestname.data.title(), section=form.section.data.upper(), registered="no", rsvp="Not yet")
@@ -401,15 +405,9 @@ def adminguestmanagement():
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
-    return render_template("guest_management.html", title='Guest list management', guests=guests, form=form)
+    return render_template("guest_management.html", title='Guest list management', guests=guests, 
+        friends=friends, teachers=teachers, others=others, form=form)
 
-#   TODO: Make it easy to clear guest email address
-#         When this is been done, we need to clear the name from the relevant user. 
-#
-#         Similarly, we need to be able to clear the name off a guest and clear the 
-#         email address from the guest. 
-
-#   TODO: Make it easy for admins to edit guests. 
 
 # TODO: Add teachers, ,friends and others to this view
 

@@ -10,54 +10,168 @@
 <br>
 
 
-<form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-    <table>
-    <tbody>
-        <tr>
-            <td class="guesttable"> 
-                <p>
-                    {{ form.guestname.label (class_='form-label')}} <br> 
-                    {{ form.guestname(size=10, class_='form-control')}}
-                </p>
-            </td>
-            <td class="guesttable">
-                <p>
-                    {{ form.section.label (class_='form-label')}} <br> 
-                    {{ form.section(class_='form-select')}}
-                </p>
-            </td> 
-            <td class="guesttable">
-                <p>{{ form.submit(class_='btn btn-primary') }}</p>
-            </td>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-graduates-tab" data-bs-toggle="tab" data-bs-target="#nav-graduates" type="button" role="tab" aria-controls="nav-graduates" aria-selected="true">Graduates</button>
+    <button class="nav-link" id="nav-friends-tab" data-bs-toggle="tab" data-bs-target="#nav-friends" type="button" role="tab" aria-controls="nav-friends" aria-selected="false">Friends of graduates</button>
+    <button class="nav-link" id="nav-teachers-tab" data-bs-toggle="tab" data-bs-target="#nav-teachers" type="button" role="tab" aria-controls="nav-teachers" aria-selected="false">Teachers</button>
+    <button class="nav-link" id="nav-others-tab" data-bs-toggle="tab" data-bs-target="#nav-others" type="button" role="tab" aria-controls="nav-others" aria-selected="false">Others</button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-graduates" role="tabpanel" aria-labelledby="nav-graduates-tab" tabindex="0">
+        <br>
+        <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="guesttable"> 
+                            <p>
+                                {{ form.guestname.label (class_='form-label')}} <br> 
+                                {{ form.guestname(size=10, class_='form-control')}}
+                            </p>
+                        </td>
+                        <td class="guesttable">
+                            <p>
+                                {{ form.section.label (class_='form-label')}} <br> 
+                                {{ form.section(class_='form-select')}}
+                            </p>
+                        </td> 
+                        <td class="guesttable">
+                            <p>{{ form.submit(class_='btn btn-primary') }}</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% for error in form.guestname.errors %}
+            <span class="alert alert-danger alert-form">[{{ error }}]</span>{% endfor %}
+            <br>
+        </form>
+
+        <table id="guest-management-table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Guest</th>
+                    <th>Section</th>
+                    <th>Email</th>
+                    <th>Registered</th>
+                    <th>RSVP'ed</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guest in guests %}
+                    {% include '_guests.html' %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-pane fade" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab" tabindex="0">
+        <br>
+        <table id="guest-friends-table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Is registered?</th>
+                    <th>RSVP'ed?</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for friend in friends %}
+                <tr>
+                    <td>{{ friend.id }}</td>
+                    <td>{{ friend.name }}</td>
+                    <td>{{ friend.email }}</td>
+                    <td>yes</td>
+                    <td>{{ friend.rsvp }}</td>
+                    <td class="aligniconsright"><a class="nolinkdecoration" href="{{ url_for('user', userid = friend.id) }}">✏️</a> | <a class="nolinkdecoration" href="{{ url_for('delete_user', userid=friend.id) }}">🗑️</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-pane fade" id="nav-teachers" role="tabpanel" aria-labelledby="nav-teachers-tab" tabindex="0">
+        <br>
+        <table id="guest-teacher-table" class="table table-striped">
+        <thead>
+             <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Is registered?</th>
+                <th>RSVP'ed?</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.id }}</td>
+                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.email }}</td>
+                <td>yes</td>
+                <td>{{ teacher.rsvp }}</td>
+                <td class="aligniconsright"><a class="nolinkdecoration" href="{{ url_for('user', userid = teacher.id) }}">✏️</a> | <a class="nolinkdecoration" href="{{ url_for('delete_user', userid=teacher.id) }}">🗑️</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <div class="tab-pane fade" id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab" tabindex="0">
+    <br>
+    <table id="guest-other-table" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>        
+            <th>Is registered?</th>
+            <th>RSVP'ed?</th>
+            <th> </th>
         </tr>
-    </tbody>
-</table>
-{% for error in form.guestname.errors %}
-<span class="alert alert-danger alert-form">[{{ error }}]</span>{% endfor %}
+        </thead>
+        <tbody>
+          {% for other in others %}
+          <tr>
+            <td>{{ other.id }}</td>
+            <td>{{ other.name }}</td>
+            <td>{{ other.email }}</td>
+            <td>yes</td>
+            <td>{{ other.rsvp }}</td>
+            <td class="aligniconsright"><a class="nolinkdecoration" href="{{ url_for('user', userid = other.id) }}">✏️</a> | <a class="nolinkdecoration" href="{{ url_for('delete_user', userid=other.id) }}">🗑️</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
 
-<br>
+</div>
 
-</form>
 
-<table id="guest-management-table" class="table table-striped">
-  <thead>
-    <tr>
-        <th>Id</th>
-        <th>Guest</th>
-        <th>Section</th>
-        <th>Email</th>
-        <th>Registered</th>
-        <th>RSVP'ed</th>
-        <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for guest in guests %}
-        {% include '_guests.html' %}
-    {% endfor %}
-  </tbody>
-</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock %}
 
