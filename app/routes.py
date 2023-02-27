@@ -38,6 +38,9 @@ def index():
 def about():
     return render_template('about.html', title='About')
 
+# TODO: Add stats to this page - how many guests, how many registered, etc.
+
+
 #
 # LOGIN
 #
@@ -93,10 +96,14 @@ def user(userid):
             return render_template('profile.html', user=user, userid=userid, guestid = guest.id)
         else:
             flash("You don't have permission to access this profile.")
-            return redirect(url_for('user', userid=userid))      
+            return redirect(url_for('user', userid=current_user.id))      
     elif guest is None:
         flash('Take a few seconds to complete your profile.')
         return redirect(url_for('selectrole', userid=current_user.id))    
+
+# TODO: Add old photo to the profile
+# TODO: Change the 'Yey, profile complete section'
+
 
 @app.route('/edit/role/<userid>', methods=['GET', 'POST'])
 @login_required
@@ -258,6 +265,13 @@ def public(guestid):
     guest = Guest.query.filter_by(id=guestid).first()
     user = User.query.filter_by(email=guest.email).first()
 
+    if guest.email is None:
+        flash("This person has not registered yet.")
+        return redirect(url_for('user', userid=current_user.id))
+    else:
+        return render_template('public.html', guestid=guestid, user=user)
+
+
     return render_template('public.html', guestid=guestid, user=user)
 
 @app.route('/reconnect', methods=['GET'])
@@ -273,6 +287,8 @@ def reconnect():
 # TODO: Make public profile for other types of people and show them in the reconnect table
 # TODO: Filter through the results of the table
 #    https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates
+# TODO: Add link "invite" next to users that are not mapped to guests 
+
 
 #
 # ADMIN
