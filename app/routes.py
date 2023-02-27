@@ -231,7 +231,7 @@ def resetProfile(userid):
         if guestToReset: 
             guestToReset.email = None
             guestToReset.registered = 'no'
-            guestToReset.rsvp = 'no'
+            guestToReset.rsvp = 'Not yet'
         user.facebook = ''
         user.twitter = ''
         user.instagram = ''
@@ -248,6 +248,7 @@ def resetProfile(userid):
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
+
 
 #
 # PUBLIC
@@ -339,7 +340,7 @@ def delete_user(userid):
             if guestToClear is not None:
                 guestToClear.email = None
                 guestToClear.registered = 'no'
-                guestToClear.rsvp = 'no'
+                guestToClear.rsvp = 'Not yet'
             db.session.delete(usertodelete)
             db.session.commit()
             flash('User was deleted.')
@@ -348,8 +349,6 @@ def delete_user(userid):
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
-
-#   TODO: Modify/Edit profile function by admins
 
 @app.route('/admin/sections', methods=['GET', 'POST'])
 @login_required
@@ -389,7 +388,7 @@ def adminguestmanagement():
         guests = Guest.query.order_by(Guest.id.asc())
         form = AddGuestForm()
         if form.validate_on_submit():
-            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper(), registered="no", rsvp="no")
+            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper(), registered="no", rsvp="Not yet")
             gv = Guest.query.filter_by(name=g.name).first()
             if gv is not None:
                 flash('Guest already exists')
@@ -412,6 +411,38 @@ def adminguestmanagement():
 
 #   TODO: Make it easy for admins to edit guests. 
 
+# TODO: Add teachers, ,friends and others to this view
+
+
+@app.route('/edit/reset/guest/<guestid>', methods=['GET','POST'])
+@login_required
+def resetGuest(guestid):
+    form = EmptyForm()
+    guesttoreset = Guest.query.filter_by(id=guestid).first()
+    usertoreset = User.query.filter_by(email = guesttoreset.email).first()
+    if current_user.role == 'admin':
+        guesttoreset.email = None
+        guesttoreset.registered = 'no'
+        guesttoreset.rsvp = 'Not yet'
+
+        # if there is a user, reset user details too
+        if usertoreset: 
+            usertoreset.name = ''
+            usertoreset.section = ''
+            if usertoreset.role == 'admin':
+                usertoreset.role = 'admin'   
+            else:
+                usertoreset.role = ''  
+            usertoreset.rsvp = 'Not yet'
+        db.session.commit()
+        return redirect(url_for('adminguestmanagement'))
+    else:
+        flash("Only admins can reset guest profiles.")
+        return redirect(url_for('user', userid=current_user.id))
+
+
+
+
 @app.route('/admin/delete/guest/<guestid>', methods=['GET', 'POST'])
 @login_required
 def delete_guest(guestid):
@@ -426,3 +457,6 @@ def delete_guest(guestid):
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
+
+
+
