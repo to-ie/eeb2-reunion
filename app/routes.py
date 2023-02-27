@@ -53,7 +53,7 @@ def login():
         return redirect(url_for('user',userid=current_user.id))
     return render_template('login.html', title='Sign In', form=form)
 
-# TODO: Password reset functionality to build in
+# TODO: Password reset functionality to build in (when email functionality is added)
 
 @app.route('/logout')
 def logout():
@@ -99,10 +99,7 @@ def user(userid):
         flash('Take a few seconds to complete your profile.')
         return redirect(url_for('selectrole', userid=userid))    
 
-# TODO: Add old photo to the profile
-# TODO: Change the 'Yey, profile complete section'
-
-# TODO: Create profiles for non graduates
+# TODO: Future development - Add old photo to the profile
 
 @app.route('/edit/role/<userid>', methods=['GET', 'POST'])
 @login_required
@@ -265,24 +262,26 @@ def resetProfile(userid):
 def public(guestid):
     guest = Guest.query.filter_by(id=guestid).first()
     user = User.query.filter_by(email=guest.email).first()
-
     if guest.email is None:
         flash("This person has not registered yet.")
         return redirect(url_for('user', userid=current_user.id))
     else:
         return render_template('public.html', guestid=guestid, user=user)
-
-
     return render_template('public.html', guestid=guestid, user=user)
+
+@app.route('/public/other/<userid>', methods=['GET'])
+@login_required
+def publicother(userid):
+    user = User.query.filter_by(id=userid).first()
+    if user.role !='I graduated in 2005':
+        return render_template('public-other.html', userid=userid, user=user)
+
+
 
 @app.route('/reconnect', methods=['GET'])
 @login_required
 def reconnect():
     guests = Guest.query.order_by(Guest.section.asc())
-    
-    # sections = Section.query.order_by(Section.section.asc())
-    # return render_template('reconnect.html', guests=guests, sections=sections)
-
     return render_template('reconnect.html', guests=guests)
 
 # TODO: Make public profile for other types of people and show them in the reconnect table

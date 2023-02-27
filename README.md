@@ -154,7 +154,10 @@ flask db upgrade
 * [ ] Contact us
     * [ ] Contact form
 
-* [ ] Countdown to event on home page and event page
+* [x] Countdown to event on home page and event page
+
+** Future development**
+* [ ] Add BacBook photo to the profile of graduates
 
 **Other:** 
 * [ ] Organise the event (who?)
