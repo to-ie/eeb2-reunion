@@ -276,12 +276,12 @@ def publicother(userid):
 @login_required
 def reconnect():
     guests = Guest.query.order_by(Guest.section.asc())
-    return render_template('reconnect.html', guests=guests)
+    friends = User.query.filter_by(role='I was friends with people who graduated in 2005').order_by(User.name.asc())
+    teachers = User.query.filter_by(role='I was a teacher at the EEB2').order_by(User.name.asc())
+    others = User.query.filter_by(role='Other').order_by(User.name.asc())
 
-# TODO: Filter through the results of the table
-#    https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates
+    return render_template('reconnect.html', guests=guests, friends=friends, teachers=teachers, others=others)
 
-# TODO: Make public profile for other types of people and show them in the reconnect table
 
 # TODO: Add link "invite" next to users that are not mapped to guests - when email functionality is implemented
 

@@ -9,22 +9,118 @@
 <br>
 
 
-<table id="reconnect-table" class="table table-striped">
-  <thead>
-    <tr>
-        <th>Section</th>
-        <th>Name</th>
-        <th>Is registered?</th>
-        <th>RSVP'ed?</th>
-        <th> </th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for guest in guests %}
-        {% include '_publicguests.html' %}
-    {% endfor %}
-  </tbody>
-</table>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Graduates</button>
+    <button class="nav-link" id="nav-friends-tab" data-bs-toggle="tab" data-bs-target="#nav-friends" type="button" role="tab" aria-controls="nav-friends" aria-selected="false">Friends of graduates</button>
+    <button class="nav-link" id="nav-teachers-tab" data-bs-toggle="tab" data-bs-target="#nav-teachers" type="button" role="tab" aria-controls="nav-teachers" aria-selected="false">Teachers</button>
+    <button class="nav-link" id="nav-others-tab" data-bs-toggle="tab" data-bs-target="#nav-others" type="button" role="tab" aria-controls="nav-others" aria-selected="false">Others</button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-graduates-tab" tabindex="0">
+    <br>
+    <table id="reconnect-table" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Section</th>
+                <th>Name</th>
+                <th>Is registered?</th>
+                <th>RSVP'ed?</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for guest in guests %}
+                {% include '_publicguests.html' %}
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+  <div class="tab-pane fade" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab" tabindex="0">
+    <br>
+    <table id="reconnect-friends-table" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Is registered?</th>
+            <th>RSVP'ed?</th>
+            <th> </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for friend in friends %}
+            <tr>
+              <td>{{ friend.name }}</td>
+              <td>yes</td>
+              <td>{{ friend.rsvp }}</td>
+              <td> <a href="{{ url_for('publicother', userid=friend.id) }}" class="align-right"><span class="badge rounded-pill text-bg-primary">See public profile</span></a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  </div>
+  <div class="tab-pane fade" id="nav-teachers" role="tabpanel" aria-labelledby="nav-teachers-tab" tabindex="0">
+    <br>
+    <table id="reconnect-teachers-table" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Is registered?</th>
+            <th>RSVP'ed?</th>
+            <th> </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for teacher in teachers %}
+            <tr>
+              <td>{{ teacher.name }}</td>
+              <td>yes</td>
+              <td>{{ teacher.rsvp }}</td>
+              <td> <a href="{{ url_for('publicother', userid=teacher.id) }}" class="align-right"><span class="badge rounded-pill text-bg-primary">See public profile</span></a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  </div>
+  <div class="tab-pane fade" id="nav-others" role="tabpanel" aria-labelledby="nav-others-tab" tabindex="0">
+    <br>
+    <table id="reconnect-other-table" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Is registered?</th>
+            <th>RSVP'ed?</th>
+            <th> </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for other in others %}
+            <tr>
+              <td>{{ other.name }}</td>
+              <td>yes</td>
+              <td>{{ other.rsvp }}</td>
+              <td> <a href="{{ url_for('publicother', userid=other.id) }}" class="align-right"><span class="badge rounded-pill text-bg-primary">See public profile</span></a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+      
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock %}
 
@@ -41,4 +137,5 @@
       });
     });
   </script>
+
 {% endblock %}
