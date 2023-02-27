@@ -9,7 +9,9 @@ from app.models import User, Guest, Section
 
 
 
-# TODO: Create an error page for when the app crashes. A 404 page will also be required
+# TODO: Create an error page for when the app crashes. + send email to admin 
+# will need to wait till emails are working.
+
 
 #
 # PAGES

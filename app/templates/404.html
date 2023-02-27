@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="title">
+        <h1>Page not found</h1>
+        <h4>Commonly known as 404</h4> 
+    </h4>
+    </div>
+
+    <div class="container text-center"> 
+        <img src="/static/404.png">
+        <p><a href="{{ url_for('index') }}">Back to homepage</a></p>
+    </div>  
+{% endblock %}
