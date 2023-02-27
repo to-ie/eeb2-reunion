@@ -248,7 +248,6 @@ def resetProfile(userid):
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
-    # return redirect(url_for('user', userid=userid))
 
 #
 # PUBLIC
@@ -273,18 +272,18 @@ def publicother(userid):
     if user.role !='I graduated in 2005':
         return render_template('public-other.html', userid=userid, user=user)
 
-
-
 @app.route('/reconnect', methods=['GET'])
 @login_required
 def reconnect():
     guests = Guest.query.order_by(Guest.section.asc())
     return render_template('reconnect.html', guests=guests)
 
-# TODO: Make public profile for other types of people and show them in the reconnect table
 # TODO: Filter through the results of the table
 #    https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates
-# TODO: Add link "invite" next to users that are not mapped to guests 
+
+# TODO: Make public profile for other types of people and show them in the reconnect table
+
+# TODO: Add link "invite" next to users that are not mapped to guests - when email functionality is implemented
 
 
 #

@@ -25,20 +25,35 @@
     </table>
 
     {% for error in form.sectioninput.errors %}
-    <span class="alert alert-danger alert-form">[{{ error }}]</span>
+    <span class="alert alert-danger alert-form">[{{ error }}]</span> 
     {% endfor %}
 </form>
+<br>
 
-<table class="table">
+<table id="section-management-table" class="table table-striped"> 
+  <thead>
     <tr>
         <th>Section</th>
         <th></th>
     </tr>
-
-{% for section in sections %}
-    {% include '_sections.html' %}
-{% endfor %}
-
+  </thead>
+  <tbody>
+    {% for section in sections %}
+        {% include '_sections.html' %}
+    {% endfor %}
+  </tbody>
 </table>
 
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#section-management-table').DataTable({
+        columns: [
+          null,
+          {orderable: false, searchable: false}],
+      });
+    });
+  </script>
 {% endblock %}

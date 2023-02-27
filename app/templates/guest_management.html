@@ -9,9 +9,10 @@
 
 <br>
 
+
 <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
-    <table >
+    <table>
     <tbody>
         <tr>
             <td class="guesttable"> 
@@ -39,7 +40,8 @@
 
 </form>
 
-<table class="table">
+<table id="guest-management-table" class="table table-striped">
+  <thead>
     <tr>
         <th>Id</th>
         <th>Guest</th>
@@ -49,11 +51,30 @@
         <th>RSVP'ed</th>
         <th></th>
     </tr>
-
-{% for guest in guests %}
-    {% include '_guests.html' %}
-{% endfor %}
-
+  </thead>
+  <tbody>
+    {% for guest in guests %}
+        {% include '_guests.html' %}
+    {% endfor %}
+  </tbody>
 </table>
 
+{% endblock %}
+
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#guest-management-table').DataTable({
+        columns: [
+          {orderable: false, searchable: false},
+          null,
+          null,
+          null,
+          {orderable: true, searchable: false},
+          {orderable: true, searchable: false},
+          {orderable: false, searchable: false}],
+      });
+    });
+  </script>
 {% endblock %}

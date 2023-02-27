@@ -8,7 +8,9 @@
 <br>
 <br>
 
-<table class="table">
+
+<table id="usermanagementtable" class="table table-striped">
+  <thead>
     <tr>
         <th>Id</th>
         <th>Name</th>
@@ -18,11 +20,29 @@
         <th>RSVP'ed</th>
         <th></th>
     </tr>
-
-{% for user in users %}
-    {% include '_users.html' %}
-{% endfor %}
-
+  </thead>
+  <tbody>
+    {% for user in users %}
+        {% include '_users.html' %}
+    {% endfor %}
+  </tbody>
 </table>
 
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#usermanagementtable').DataTable({
+        columns: [
+          {orderable: false, searchable: false},
+          null,
+          null,
+          null,
+          null,
+          {orderable: true, searchable: false},
+          {orderable: false, searchable: false}],
+      });
+    });
+  </script>
 {% endblock %}
