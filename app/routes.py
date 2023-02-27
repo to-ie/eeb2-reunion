@@ -408,10 +408,6 @@ def adminguestmanagement():
     return render_template("guest_management.html", title='Guest list management', guests=guests, 
         friends=friends, teachers=teachers, others=others, form=form)
 
-
-# TODO: Add teachers, ,friends and others to this view
-
-
 @app.route('/edit/reset/guest/<guestid>', methods=['GET','POST'])
 @login_required
 def resetGuest(guestid):
@@ -422,8 +418,6 @@ def resetGuest(guestid):
         guesttoreset.email = None
         guesttoreset.registered = 'no'
         guesttoreset.rsvp = 'Not yet'
-
-        # if there is a user, reset user details too
         if usertoreset: 
             usertoreset.name = ''
             usertoreset.section = ''
@@ -438,14 +432,15 @@ def resetGuest(guestid):
         flash("Only admins can reset guest profiles.")
         return redirect(url_for('user', userid=current_user.id))
 
-
-
-
 @app.route('/admin/delete/guest/<guestid>', methods=['GET', 'POST'])
 @login_required
 def delete_guest(guestid):
     currentguest = Guest.query.filter_by(id=guestid).first_or_404()
+    user = User.query.filter_by(email=currentguest.email).first_or_404()
     if current_user.role == 'admin':
+        if user:
+            user.name = ''
+            user.section = ''
         db.session.delete(currentguest)
         # TODO: If guest is deleted, user with the name associated needs to be reset
         #       ie: you want to avoid having a user with the name of a deleted guest.
