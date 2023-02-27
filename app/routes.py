@@ -7,6 +7,12 @@ from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSoc
 from app.forms import nameOther
 from app.models import User, Guest, Section
 
+# TODO: RSVP module & management
+# TODO: Down memory lane page
+# TODO: Contact page
+
+
+
 # TODO: Create an error page for when the app crashes. + send email to admin 
 # will need to wait till emails are working.
 
@@ -71,6 +77,8 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+# TODO: Verify email address (when email functionality is added)
+
 #
 # USER PRIVATE
 #
@@ -96,7 +104,10 @@ def user(userid):
         flash('Take a few seconds to complete your profile.')
         return redirect(url_for('selectrole', userid=userid))    
 
+# TODO: Photo upload by user
+
 # TODO: Future development - Add old photo to the profile
+
 
 @app.route('/edit/role/<userid>', methods=['GET', 'POST'])
 @login_required
