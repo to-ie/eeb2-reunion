@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User, Guest, Section
+
 
 class LoginForm(FlaskForm):
     username = StringField('Email address', validators=[DataRequired()])
@@ -65,7 +67,6 @@ class selectSectionForm(FlaskForm):
         super(selectSectionForm, self).__init__()
         self.sectionselect.choices = Section.query.order_by(Section.section.asc()).all()
 
-
 class selectNameForm(FlaskForm):
     nameselect = SelectField(u'Name', choices = [], validators = [DataRequired()])
     submit = SubmitField('Save')
@@ -96,3 +97,7 @@ class nameOther(FlaskForm):
             raise ValidationError('Please use a different name.')
         if guest is not None:
             raise ValidationError('Please use a different name.')
+
+class ProfilePictureForm(FlaskForm):
+    file = FileField('File')
+    submit = SubmitField('Submit')

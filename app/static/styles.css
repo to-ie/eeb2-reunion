@@ -355,3 +355,19 @@ h4 {
 .edit-rsvp{
     margin-top: -35px;
 }
+
+.edit-avatar{
+    font-size: 12px;
+    text-decoration: none;
+    color: #1e1e1e66;
+    text-align: center !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: table;
+}
+
+.small-gray{
+    font-size: 12px;
+    color: #1e1e1e66;
+    line-height: 2px;
+}

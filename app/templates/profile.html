@@ -21,7 +21,13 @@
                 <div class="row align-items-start">
 
                     <div class="col-6">
+                        {% if user.avatar %}
+                        <img class="placeholderimage" src="/static/uploads/{{ user.avatar }}">
+                        {% else %}    
                         <img class="placeholderimage" src="https://dummyimage.com/600x800/c2c2c2/fff.jpg&text=Profile+placeholder">
+                        {% endif %}
+                        <a href="{{ url_for('upload_files', userid=userid) }}" class="edit-avatar">Edit profile picture</a>
+
                     </div>
 
                     <div class="col-6">

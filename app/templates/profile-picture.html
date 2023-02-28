@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="title">
+    <h1>Upload photo</h1>
+    <h4>Show us them pearly whites</h4>
+</div>
+
+
+<div class="login-form">
+    <form action="{{ url_for('upload_files', userid=userid) }}" class="dropzone" method="POST" enctype="multipart/form-data">
+        <div class="dz-message" data-dz-message>
+            Drop your new profile picture here.
+            <br>
+            Upload will begin automatically.
+            <br>
+            <br>
+            <span class="small-gray">
+            <p>Accepted file extensions: .jpg, .png and .gif</p>
+            <p>Max size: 2048px</p>
+            </span>
+        </div>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+
+</div>  
+
+
+{% endblock %}

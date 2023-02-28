@@ -113,6 +113,10 @@ flask db migrate -m "posts table"
 flask db upgrade
 ```
 
+Set Debug mode:
+```
+export FLASK_DEBUG=1
+```
 
 ## Roadmap
 * [x] Create the signup / login mechanism 

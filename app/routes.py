@@ -1,20 +1,22 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, abort
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
 from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSocialLinksForm
-from app.forms import nameOther
+from app.forms import nameOther, ProfilePictureForm
 from app.models import User, Guest, Section
+import imghdr
+import os
+from flask_wtf.file import FileField
+import imghdr
 
+
+# TODO: Profile picture upload
 # TODO: RSVP module & management
 # TODO: Down memory lane page
 # TODO: Contact page
-
-
-
-# TODO: Create an error page for when the app crashes. + send email to admin 
-# will need to wait till emails are working.
+# TODO: send email to admin when error 500 shows up
 
 #
 # PAGES
@@ -257,6 +259,44 @@ def resetProfile(userid):
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
 
+
+# Validation of uploaded photo
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0)
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format)
+
+
+@app.errorhandler(413)
+def too_large(e):
+    return "File is too large", 413
+
+@app.route('/upload/<userid>', methods=['GET', 'POST'])
+def upload_files(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = ProfilePictureForm()
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    if request.method == 'POST':
+        uploaded_file = request.files['file']
+        filename = uploaded_file.filename
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
+                    file_ext != validate_image(uploaded_file.stream):
+                        # abort(400)
+                # flash("This file is not allowed. Make sure you're uploading an image.")
+                # return redirect(url_for('upload_files', userid=userid))
+                return "Invalid image", 400
+        uploaded_file.save(os.path.join(basedir, app.config['UPLOAD_PATH'], current_user.get_id()+file_ext))
+        user.avatar = userid+file_ext
+        db.session.commit()
+        return redirect(url_for('user', userid=userid))
+    return render_template('profile-picture.html', userid=userid, form = form)
+
+# TODO: Turn upload form into dropzone
 
 #
 # PUBLIC

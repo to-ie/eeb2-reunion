@@ -12,7 +12,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     role = db.Column(db.String(64), index=True, unique=False)
     rsvp = db.Column(db.String(64), index=True, unique=False)
-
+    avatar = db.Column(db.String(64), index=True, unique=False)
+    
     facebook = db.Column(db.String(64), index=True, unique=False)
     twitter = db.Column(db.String(64), index=True, unique=False)
     instagram = db.Column(db.String(64), index=True, unique=False)

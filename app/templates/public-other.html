@@ -15,7 +15,11 @@
                 <div class="row align-items-start">
 
                     <div class="col-4">
+                        {% if user.avatar %}
+                        <img class="placeholderimage" src="/static/uploads/{{ user.avatar }}">
+                        {% else %}    
                         <img class="placeholderimage" src="https://dummyimage.com/600x800/c2c2c2/fff.jpg&text=Profile+placeholder">
+                        {% endif %}
                     </div>
 
                     <div class="col-8">
