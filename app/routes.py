@@ -12,7 +12,6 @@ from flask_wtf.file import FileField
 import imghdr
 
 
-# TODO: Profile picture upload
 # TODO: RSVP module & management
 # TODO: Down memory lane page
 # TODO: Contact page
@@ -105,8 +104,6 @@ def user(userid):
     elif guest is None:
         flash('Take a few seconds to complete your profile.')
         return redirect(url_for('selectrole', userid=userid))    
-
-# TODO: Photo upload by user
 
 # TODO: Future development - Add old photo to the profile
 
@@ -259,7 +256,6 @@ def resetProfile(userid):
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
 
-
 # Validation of uploaded photo
 def validate_image(stream):
     header = stream.read(512)
@@ -286,17 +282,12 @@ def upload_files(userid):
             file_ext = os.path.splitext(filename)[1]
             if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
                     file_ext != validate_image(uploaded_file.stream):
-                        # abort(400)
-                # flash("This file is not allowed. Make sure you're uploading an image.")
-                # return redirect(url_for('upload_files', userid=userid))
                 return "Invalid image", 400
-        uploaded_file.save(os.path.join(basedir, app.config['UPLOAD_PATH'], current_user.get_id()+file_ext))
-        user.avatar = userid+file_ext
-        db.session.commit()
+            uploaded_file.save(os.path.join(basedir, app.config['UPLOAD_PATH'], current_user.get_id()+file_ext))
+            user.avatar = userid+file_ext
+            db.session.commit()
         return redirect(url_for('user', userid=userid))
     return render_template('profile-picture.html', userid=userid, form = form)
-
-# TODO: Turn upload form into dropzone
 
 #
 # PUBLIC
@@ -331,9 +322,7 @@ def reconnect():
 
     return render_template('reconnect.html', guests=guests, friends=friends, teachers=teachers, others=others)
 
-
 # TODO: Add link "invite" next to users that are not mapped to guests - when email functionality is implemented
-
 
 #
 # ADMIN
