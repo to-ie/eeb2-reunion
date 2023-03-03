@@ -127,3 +127,16 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+
+# Manually added by Theo
+
+# ignore ALL .log files
+*.log
+
+config.py
+
+# ignore ALL files in ANY directory named temp
+venv/ 
+logs/
