@@ -4,13 +4,11 @@
 - [About the project](#about-the-project)
   * [Screenshots](#screenshots)
   * [Tech Stack](#tech-stack)
-  * [Features](#features)
 - [Getting started](#getting-started)
-  * [Prerequisits](#prerequisites)
+  * [Local variables](#local-variables)
   * [Run locally](#run-locally)
   * [Deployment](#deployment)
   * [Other commands](#other-commands)
-- [Roadmap](#roadmap)
 - [Contributing](#contributing) 
 - [FAQ](#faq)
 - [License](#license)
@@ -49,27 +47,25 @@ This platform aims to:
   </ul>
 </details>
 
-### Features
-
-- Homepage
-  - Information about the event
-  - Count of guest list / users / RSVPs
-  - Share (on Facebook, Instagram, email, etc.)
-  - Invite to the WhatsApp group
-- Signup
-  - Map users to members of the guest list
-- Reset password 
-- Login 
-- RSVP / Payment 
-- Spread the word
-  - Help identify missing members of the guest list and invite them to use the platform
-  - Invite users who are not members of the guest list (teachers, people who failed years, etc)
-- Administration
-  - Guest list management
-  - User / RSVP management
-- Contact us
-
 ## Getting Started
+
+### Local variables
+```
+SECRET_KEY = 
+SQLALCHEMY_DATABASE_URI = 
+SQLALCHEMY_TRACK_MODIFICATIONS = 
+
+UPLOAD_EXTENSIONS = 
+MAX_CONTENT_LENGTH = 
+UPLOAD_PATH = 
+
+MAIL_SERVER = 
+MAIL_PORT = 
+MAIL_USE_TLS = 
+MAIL_USERNAME = 
+MAIL_PASSWORD = 
+ADMINS = 
+```
 
 ### Run Locally
 
@@ -118,50 +114,6 @@ Set Debug mode:
 export FLASK_DEBUG=1
 ```
 
-## Roadmap
-* [x] Create the signup / login mechanism 
-  * [x] Create signup / login 
-    * [x] Once a user signup, map user to guest in the guest list.
-    * [ ] Make sure signup module is not subject to script injections  / explore AWS Cognito 
-  * [ ] Create password reset module
-  * [x] Create the login module 
-    * [x] User categories: Admin / View only / Student / Other
-    * [x] If the user is not already linked to a member of the guest list, ask the user to identify themselves.
-    * [ ] Create routes for 'friends of graduates', 'teachers', 'other' 
-* [x] Create the header/menu structure with all pages (blank)
-  * [x] Homepage
-    * [x] Count of guest list / users / RSVPs
-    * [x] Share (on Facebook, Instagram, email, etc.)
-    * [x] Invite to the WhatsApp group
-  * [x] About the event
-  * [ ] RSVP / Payment
-    * [ ] Make sure the user is mapped to a guest in the guest list. If not, redirect to the right page 
-    * [ ] Allow user to tentatively confirm presence by tick-box
-    * [ ] Allow user to confirm the presence by payment.
-    * [ ] [?] Allow +1s? How to manage additional guests?
-* [ ] Spread the word
-  * [ ] Show a list of guests that are not currently registered and allow user to send an email invite. 
-  * [ ] Allow user to send an invitation to users who are not part of the guest list (teachers, students who failed the previous year).
-  * [ ] Get in touch if the guest list is incomplete.
-* [ ] Reconnect with past friends
-  * [ ] create public profiles for users 
-  * [ ] Make users searchable
-* [ ] Administration
-  * [x] Guest list management
-    * [x] Creation of new guests in the guest list 
-    * [x] Removal of guests in the guest list
-    * [ ] Edit guests
-    * [ ] Edit users
-  * [ ] User management
-    * [ ] Lists of users who have registered / RSVP'd / Paid
-  * [ ] RSVP / Payment management 
-* [ ] Contact us
-    * [ ] Contact form
-
-* [x] Countdown to event on home page and event page
-
-** Future development**
-* [ ] Add BacBook photo to the profile of graduates
 
 **Other:** 
 * [ ] Organise the event (who?)
