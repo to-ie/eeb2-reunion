@@ -135,7 +135,7 @@ Distributed under the [MIT License](https://choosealicense.com/licenses/mit/).
 
 ## Contact
 
-Theo - toie@duck.com
+Theo - hello@t-o.ie
 
 ## Acknowledgements
 
