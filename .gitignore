@@ -136,6 +136,7 @@ dmypy.json
 *.log
 
 config.py
+/config.py
 
 # ignore ALL files in ANY directory named temp
 venv/ 
