@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="title">
+    <h1>Where do you currently live?</h1>
+    <h4>City, town... be as specific as you want!</h4>
+</div>
+
+<div class="login-form">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        
+        {{ form.location(class_='form-control')}}
+        <br>
+        {{ form.submit(class_='btn btn-primary') }}
+
+        {% for error in form.location.errors %}
+        
+        <span class="alert alert-danger alert-form">[{{ error }}]</span>
+        {% endfor %}
+    </form>
+
+</div>  
+
+
+{% endblock %}

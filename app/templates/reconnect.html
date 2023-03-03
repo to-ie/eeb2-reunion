@@ -127,5 +127,40 @@
       });
     });
   </script>
+  <script>
+    $(document).ready(function () {
+      $('#reconnect-friends-table').DataTable({
+        columns: [
+          null,
+          {orderable: true, searchable: false},
+          {orderable: true, searchable: false},
+          {orderable: false, searchable: false}],
+      });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('#reconnect-teachers-table').DataTable({
+        columns: [
+          null,
+          {orderable: true, searchable: false},
+          {orderable: true, searchable: false},
+          {orderable: false, searchable: false}],
+      });
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('#reconnect-other-table').DataTable({
+        columns: [
+          null,
+          {orderable: true, searchable: false},
+          {orderable: true, searchable: false},
+          {orderable: false, searchable: false}],
+      });
+    });
+  </script>
 
 {% endblock %}

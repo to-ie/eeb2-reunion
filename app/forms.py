@@ -75,6 +75,10 @@ class selectNameForm(FlaskForm):
         super(selectNameForm, self).__init__()
         self.nameselect.choices = Guest.query.filter_by(email=None).filter_by(section=currentsection).order_by(Guest.name.asc()).all()
 
+class selectLocationForm(FlaskForm):
+    location = StringField('Your name', validators=[DataRequired()])
+    submit = SubmitField('Save')
+
 class editSocialLinksForm(FlaskForm):
     facebook = StringField('Facebook', validators=[])
     twitter = StringField('Twitter', validators=[])

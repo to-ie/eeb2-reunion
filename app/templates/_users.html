@@ -3,6 +3,7 @@
     <td>{{ user.name }}</td>
     <td>{{ user.section }}</td>
     <td>{{ user.email }}</td>
+    <td>{{ user.currentlocation }}</td>
     <td>{{ user.role }}</td>
     <td>{{ user.rsvp }}</td>
         <td class="aligniconsright"><a class="nolinkdecoration" href="{{ url_for('user', userid = user.id) }}">✏️</a> | <a class="nolinkdecoration" href="{{ url_for('toggleadmin', userid = user.id) }}">👔</a> | <a class="nolinkdecoration" href="{{ url_for('delete_user', userid=user.id) }}">🗑️</a></td>

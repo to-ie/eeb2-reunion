@@ -4,18 +4,12 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
 from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSocialLinksForm
-from app.forms import nameOther, ProfilePictureForm
+from app.forms import nameOther, ProfilePictureForm, selectLocationForm
 from app.models import User, Guest, Section
 import imghdr
 import os
 from flask_wtf.file import FileField
 import imghdr
-
-
-# TODO: RSVP module & management
-# TODO: Down memory lane page
-# TODO: Contact page
-# TODO: send email to admin when error 500 shows up
 
 #
 # PAGES
@@ -70,7 +64,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.email.data.lower(), name="", section="", email=form.email.data.lower(), role="",rsvp="Not yet")
+        user = User(username=form.email.data.lower(), name="", section="", email=form.email.data.lower(), role="",rsvp="Not yet", currentlocation="")
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -167,13 +161,28 @@ def nameselection(userid):
             guest.email = user.email
             guest.registered = 'yes'
             db.session.commit()
-            return redirect(url_for('user', userid=userid))
+            return redirect(url_for('currentlocation', userid=userid))
         elif request.method == 'GET':
             form.nameselect.data = user.name
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
     return render_template('select-user.html', user=user, form=form)
+
+@app.route('/edit/location/<userid>', methods=['GET', 'POST'])
+@login_required
+def currentlocation(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    form = selectLocationForm()
+    if user.id == current_user.id or current_user.role=='admin':
+        if form.validate_on_submit():
+            user.currentlocation = form.location.data
+            db.session.commit()
+            return redirect(url_for('user', userid=userid))
+    else:
+        flash("You can't edit someone else's profile!")
+        return redirect(url_for('user', userid=current_user.id))
+    return render_template('select-location.html', user=user, form=form)
 
 @app.route('/edit/other/<userid>', methods=['GET', 'POST'])
 @login_required
@@ -184,7 +193,7 @@ def nameother(userid):
         if form.validate_on_submit():
             user.name = form.name.data
             db.session.commit()
-            return redirect(url_for('user', userid=userid))
+            return redirect(url_for('currentlocation', userid=userid))
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user))
@@ -239,6 +248,7 @@ def resetProfile(userid):
             guestToReset.email = None
             guestToReset.registered = 'no'
             guestToReset.rsvp = 'Not yet'
+        user.currentlocation = ''
         user.facebook = ''
         user.twitter = ''
         user.instagram = ''
@@ -458,6 +468,7 @@ def resetGuest(guestid):
         if usertoreset: 
             usertoreset.name = ''
             usertoreset.section = ''
+            usertoreset.currentlocation = ''
             if usertoreset.role == 'admin':
                 usertoreset.role = 'admin'   
             else:
