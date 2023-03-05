@@ -77,6 +77,7 @@ def register():
 
 # TODO: Verify email address (when email functionality is added)
 
+# TODO: Email needs whitelisting 
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():

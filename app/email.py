@@ -16,7 +16,7 @@ def send_email(subject, sender, recipients, text_body, html_body):
 def send_password_reset_email(user):
     token = user.get_reset_password_token()
     send_email('EEB2 Reunion - Reset Your Password',
-               sender='eeb2@t-o.ie',
+               sender='no-reply@t-o.ie',
                recipients=[user.email],
                text_body=render_template('email/reset_password.txt',
                                          user=user, token=token),
