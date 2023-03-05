@@ -11,7 +11,7 @@ import os
 from flask_wtf.file import FileField
 import imghdr
 from app.forms import ResetPasswordRequestForm
-from app.email import send_password_reset_email
+from app.email import send_password_reset_email, send_verification_email
 from app.forms import ResetPasswordForm
 
 #
@@ -50,11 +50,12 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
+        if user.verified != 'yes':
+            flash('Please confirm your account. Check your inbox (or spam folder) for the verification email.')
+            return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('user',userid=current_user.id))
     return render_template('login.html', title='Sign In', form=form)
-
-# TODO: Password reset functionality to build in (when email functionality is added)
 
 @app.route('/logout')
 def logout():
@@ -67,17 +68,15 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.email.data.lower(), name="", section="", email=form.email.data.lower(), role="",rsvp="Not yet", currentlocation="")
+        user = User(username=form.email.data.lower(), name="", section="", email=form.email.data.lower(), 
+            role="",rsvp="Not yet", currentlocation="", verified='no')
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        send_verification_email(user, userid=user.id)
+        flash('Congratulations, you have created your account. Please check your inbox (or spam folder) to verify your email address.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
-
-# TODO: Verify email address (when email functionality is added)
-
-# TODO: Email needs whitelisting 
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
@@ -88,7 +87,7 @@ def reset_password_request():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             send_password_reset_email(user)
-        flash('Check your email for the instructions to reset your password')
+        flash('If the account exists, we have sent you the instructions to reset your password. Check your emails.')
         return redirect(url_for('login'))
     return render_template('reset_password_request.html',
                            title='Reset Password', form=form)
@@ -107,6 +106,29 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+@app.route('/verify_request', methods=['GET', 'POST'])
+def verify_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = EmptyForm()
+    user = User.query.filter_by(email=form.email.data).first()
+    if user:
+        send_verification_email(user, userid=user.id)
+        return redirect(url_for('login'))
+    return redirect(url_for('login'))
+
+@app.route('/verify/rRqzJgsWs5g3XQ5UDj<userid>', methods=['GET', 'POST'])
+def verify_account(userid):
+    if current_user.is_authenticated:
+        return redirect(url_for('user', userid=current_user.id))
+    user = User.query.filter_by(id=userid).first()
+    if not user:
+        return redirect(url_for('login'))
+    user.verified = 'yes'
+    db.session.commit()
+    flash('Your account is now verified, you can login.')
+    return redirect(url_for('login'))
 
 #
 # USER PRIVATE
@@ -132,9 +154,6 @@ def user(userid):
     elif guest is None:
         flash('Take a few seconds to complete your profile.')
         return redirect(url_for('selectrole', userid=userid))    
-
-# TODO: Future development - Add old photo to the profile
-
 
 @app.route('/edit/role/<userid>', methods=['GET', 'POST'])
 @login_required
@@ -408,6 +427,30 @@ def toggleadmin(userid):
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
+
+
+
+
+
+@app.route('/admin/toggleverify/<userid>', methods=['GET', 'POST'])
+@login_required
+def toggleverify(userid):
+    if current_user.role == 'admin':
+        user = User.query.filter_by(id=userid).first()
+        form = EmptyForm()
+        user.verified = 'yes'
+        db.session.commit()
+        flash('Your changes have been saved: the user email is verified.')
+        return redirect(url_for('adminusermanagement'))
+    else: 
+        flash('This is a restricted area.')
+        return redirect(url_for('index'))
+    return redirect(url_for('adminusermanagement'))
+
+
+
+
+
 
 @app.route('/admin/delete/user/<userid>', methods=['GET', 'POST'])
 @login_required

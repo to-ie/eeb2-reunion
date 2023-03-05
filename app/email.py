@@ -22,3 +22,12 @@ def send_password_reset_email(user):
                                          user=user, token=token),
                html_body=render_template('email/reset_password.html',
                                          user=user, token=token))
+
+def send_verification_email(user, userid):
+    send_email('EEB2 Reunion - Account verification',
+               sender='no-reply@t-o.ie',
+               recipients=[user.email],
+               text_body=render_template('email/verification.txt',
+                                         user=user, userid=userid),
+               html_body=render_template('email/verification.html',
+                                         user=user, userid=userid))

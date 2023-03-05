@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     rsvp = db.Column(db.String(64), index=True, unique=False)
     avatar = db.Column(db.String(64), index=True, unique=False)
     currentlocation = db.Column(db.String(64), index=True, unique=False)
+    verified = db.Column(db.String(64), index=True, unique=False)
     
     facebook = db.Column(db.String(64), index=True, unique=False)
     twitter = db.Column(db.String(64), index=True, unique=False)
