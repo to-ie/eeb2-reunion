@@ -39,7 +39,7 @@
                             <li><a class="dropdown-item" href="/about">About the event</a></li>
                             <li><a class="dropdown-item" href="#">RSVP</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('reconnect') }}">Reconnect</a></li>
-                            <li><a class="dropdown-item" href="#">Down memory lane</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('memory_lane') }}">Down memory lane</a></li>
                             {% if current_user.role == "admin" %}
                             <li><hr class="dropdown-divider"></li>
                             <li class="nav-header"><b>Admin area</b></li>
@@ -79,7 +79,7 @@
 <div class="container text-center">
     <br>
     <hr>
-    Made with ♥️ in Dublin. 
+    Made with ♥️ in Dublin.
     </div>
 
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

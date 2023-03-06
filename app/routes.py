@@ -328,7 +328,6 @@ def validate_image(stream):
         return None
     return '.' + (format)
 
-
 @app.errorhandler(413)
 def too_large(e):
     return "File is too large", 413
@@ -387,6 +386,12 @@ def reconnect():
 
 # TODO: Add link "invite" next to users that are not mapped to guests - when email functionality is implemented
 
+@app.route('/memory-lane', methods=['GET'])
+@login_required
+def memory_lane():
+    return render_template('memory-lane.html')
+
+
 #
 # ADMIN
 #
@@ -428,10 +433,6 @@ def toggleadmin(userid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
 
-
-
-
-
 @app.route('/admin/toggleverify/<userid>', methods=['GET', 'POST'])
 @login_required
 def toggleverify(userid):
@@ -446,11 +447,6 @@ def toggleverify(userid):
         flash('This is a restricted area.')
         return redirect(url_for('index'))
     return redirect(url_for('adminusermanagement'))
-
-
-
-
-
 
 @app.route('/admin/delete/user/<userid>', methods=['GET', 'POST'])
 @login_required
