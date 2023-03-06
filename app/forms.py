@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User, Guest, Section
 
@@ -115,3 +115,10 @@ class ResetPasswordForm(FlaskForm):
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Request Password Reset')
+
+class contactForm(FlaskForm):
+    name = StringField('Your name', validators=[DataRequired()])
+    email = StringField('Your email', validators=[DataRequired(), Email()])
+    message = TextAreaField('Email', validators=[DataRequired()])
+    captcha = StringField(validators=[DataRequired()])
+    submit = SubmitField('Send message')

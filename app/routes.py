@@ -11,8 +11,8 @@ import os
 from flask_wtf.file import FileField
 import imghdr
 from app.forms import ResetPasswordRequestForm
-from app.email import send_password_reset_email, send_verification_email
-from app.forms import ResetPasswordForm
+from app.email import send_password_reset_email, send_verification_email, send_contact_email
+from app.forms import ResetPasswordForm, contactForm
 
 #
 # PAGES
@@ -129,6 +129,22 @@ def verify_account(userid):
     db.session.commit()
     flash('Your account is now verified, you can login.')
     return redirect(url_for('login'))
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = contactForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        message = form.message.data
+        captcha = form.captcha.data
+        if captcha == '7':
+            send_contact_email(name=name, email=email, message=message, captcha=captcha)
+            flash('Your message was sent.')
+            return redirect(url_for('index'))
+        flash('Check the captcha there?')
+    return render_template('contact.html', form=form)
+
 
 #
 # USER PRIVATE

@@ -1,0 +1,5 @@
+New message from {{ name }} {{ email }}
+
+----- 
+
+{{ message }}

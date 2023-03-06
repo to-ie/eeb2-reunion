@@ -31,3 +31,12 @@ def send_verification_email(user, userid):
                                          user=user, userid=userid),
                html_body=render_template('email/verification.html',
                                          user=user, userid=userid))
+
+def send_contact_email(name, email, message, captcha):
+    send_email('EEB2 Reunion - New message',
+               sender='no-reply@t-o.ie',
+               recipients=app.config['ADMINS'],
+               text_body=render_template('email/contact.txt',
+                                         name=name, email=email, message=message, captcha=captcha),
+               html_body=render_template('email/contact.html',
+                                         name=name, email=email, message=message, captcha=captcha))
