@@ -40,3 +40,12 @@ def send_contact_email(name, email, message, captcha):
                                          name=name, email=email, message=message, captcha=captcha),
                html_body=render_template('email/contact.html',
                                          name=name, email=email, message=message, captcha=captcha))
+
+def send_invite_email(email, captcha):
+    send_email('EEB2 Reunion - Invitation',
+               sender='no-reply@t-o.ie',
+               recipients=[email],
+               text_body=render_template('email/invite.txt',
+                                         email=email, captcha=captcha),
+               html_body=render_template('email/invite.html',
+                                         email=email, captcha=captcha))

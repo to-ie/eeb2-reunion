@@ -119,6 +119,11 @@ class ResetPasswordForm(FlaskForm):
 class contactForm(FlaskForm):
     name = StringField('Your name', validators=[DataRequired()])
     email = StringField('Your email', validators=[DataRequired(), Email()])
-    message = TextAreaField('Email', validators=[DataRequired()])
+    message = TextAreaField('Your message', validators=[DataRequired()])
     captcha = StringField(validators=[DataRequired()])
     submit = SubmitField('Send message')
+
+class inviteForm(FlaskForm):
+    email = StringField('Email address', validators=[DataRequired(), Email()])
+    captcha = StringField(validators=[DataRequired()])
+    submit = SubmitField('Send the invite')

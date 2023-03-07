@@ -5,5 +5,11 @@
     <td>{{ guest.rsvp }}</td>
     <td>{% if guest.email %}
         <a href="{{ url_for('public', guestid=guest.id) }}" class="align-right"><span class="badge rounded-pill text-bg-primary">See public profile</span></a></td>
+        {% else %}
+        <a href="{{ url_for('invite', guestid=guest.id) }}" class="align-right"><span class="badge rounded-pill text-bg-secondary">Invite</span></a></td>
+
+
+
+
         {% endif %}
 </tr>

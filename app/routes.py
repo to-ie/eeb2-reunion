@@ -1,18 +1,17 @@
+import os
+import imghdr
+from app import app, db
+from werkzeug.urls import url_parse
 from flask import render_template, flash, redirect, url_for, request, abort
 from flask_login import login_user, logout_user, current_user, login_required
-from werkzeug.urls import url_parse
-from app import app, db
 from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
 from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSocialLinksForm
 from app.forms import nameOther, ProfilePictureForm, selectLocationForm
-from app.models import User, Guest, Section
-import imghdr
-import os
-from flask_wtf.file import FileField
-import imghdr
 from app.forms import ResetPasswordRequestForm
-from app.email import send_password_reset_email, send_verification_email, send_contact_email
-from app.forms import ResetPasswordForm, contactForm
+from app.forms import ResetPasswordForm, contactForm, inviteForm
+from app.models import User, Guest, Section
+from flask_wtf.file import FileField
+from app.email import send_password_reset_email, send_verification_email, send_contact_email, send_invite_email
 
 #
 # PAGES
@@ -138,7 +137,7 @@ def contact():
         email = form.email.data
         message = form.message.data
         captcha = form.captcha.data
-        if captcha == '7':
+        if captcha == '7' or captcha == 'seven' or captcha == 'Seven':
             send_contact_email(name=name, email=email, message=message, captcha=captcha)
             flash('Your message was sent.')
             return redirect(url_for('index'))
@@ -390,17 +389,35 @@ def publicother(userid):
     if user.role !='I graduated in 2005':
         return render_template('public-other.html', userid=userid, user=user)
 
-@app.route('/reconnect', methods=['GET'])
+
+@app.route('/reconnect', methods=['GET', 'POST'])
 @login_required
 def reconnect():
     guests = Guest.query.order_by(Guest.section.asc())
     friends = User.query.filter_by(role='I was friends with people who graduated in 2005').order_by(User.name.asc())
     teachers = User.query.filter_by(role='I was a teacher at the EEB2').order_by(User.name.asc())
     others = User.query.filter_by(role='Other').order_by(User.name.asc())
+    form = inviteForm()
+    return render_template('reconnect.html', guests=guests, friends=friends, 
+        teachers=teachers, others=others)
 
-    return render_template('reconnect.html', guests=guests, friends=friends, teachers=teachers, others=others)
+@app.route('/invite/<guestid>', methods=['GET', 'POST'])
+@login_required
+def invite(guestid):
+    guest = Guest.query.filter_by(id=guestid).first()
+    form = inviteForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        captcha = form.captcha.data
+        if captcha == '3' or captcha == 'three' or captcha == 'Three':
+            send_invite_email(email=email, captcha=captcha)
+            flash("Thank you, the invite has been sent.")
+            return redirect(url_for('reconnect', userid=current_user.id))
+        else: 
+            flash("Check the captcha real quick?")
+            return render_template('invite.html', guest=guest, form=form)
+    return render_template('invite.html', guest=guest, form=form)
 
-# TODO: Add link "invite" next to users that are not mapped to guests - when email functionality is implemented
 
 @app.route('/memory-lane', methods=['GET'])
 @login_required
