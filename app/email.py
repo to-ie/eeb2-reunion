@@ -49,3 +49,25 @@ def send_invite_email(email, captcha):
                                          email=email, captcha=captcha),
                html_body=render_template('email/invite.html',
                                          email=email, captcha=captcha))
+
+def new_user_email(user):
+    send_email('EEB2 Reunion - New user',
+               sender='no-reply@t-o.ie',
+               recipients=app.config['ADMINS'],
+               text_body=render_template('email/new-user.txt', user=user),
+               html_body=render_template('email/new-user.html', user=user))
+
+def profile_reset_email(email, userid):
+    send_email('EEB2 Reunion - Profile reset',
+               sender='no-reply@t-o.ie',
+               recipients=[email],
+               text_body=render_template('email/reset.txt', email=email, userid=userid),
+               html_body=render_template('email/reset.html', email=email, userid=userid))
+
+
+def new_rsvp_email(user):
+    send_email('EEB2 Reunion - New RSVP',
+               sender='no-reply@t-o.ie',
+               recipients=app.config['ADMINS'],
+               text_body=render_template('email/rsvp.txt', user=user),
+               html_body=render_template('email/rsvp.html', user=user))

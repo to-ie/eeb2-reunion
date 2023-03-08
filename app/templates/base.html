@@ -38,7 +38,9 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('user', userid=current_user.id) }}">Your profile</a></li>
                             <li><a class="dropdown-item" href="/about">About the event</a></li>
+                            {% if current_user.rsvp == 'Not yet' %}
                             <li><a class="dropdown-item" href="{{ url_for('rsvp', userid=current_user.id) }}">RSVP</a></li>
+                            {% endif %}
                             <li><a class="dropdown-item" href="{{ url_for('reconnect') }}">Reconnect</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('memory_lane') }}">Down memory lane</a></li>
                             {% if current_user.role == "admin" %}

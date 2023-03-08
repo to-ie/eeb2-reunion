@@ -1,0 +1,9 @@
+Hello,
+
+A user RSVP'ed on the site.
+
+{{ user.email }}
+
+Sincerely,
+
+The EEB2 Reunion Team

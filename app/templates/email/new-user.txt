@@ -1,0 +1,9 @@
+Hello,
+
+A new user registered on the site.
+
+{{ user.email }}
+
+Sincerely,
+
+The EEB2 Reunion Team

@@ -11,8 +11,9 @@ from app.forms import ResetPasswordRequestForm, rsvpForm
 from app.forms import ResetPasswordForm, contactForm, inviteForm
 from app.models import User, Guest, Section
 from flask_wtf.file import FileField
-from app.email import send_password_reset_email, send_verification_email, send_contact_email, send_invite_email
-
+from app.email import send_password_reset_email, send_verification_email, send_contact_email
+from app.email import send_invite_email, new_user_email, profile_reset_email
+from app.email import new_rsvp_email
 #
 # PAGES ------------------------------------------------------------------------
 #
@@ -31,7 +32,7 @@ def index():
 def about():
     guestcount = Guest.query.count()
     usercount = Guest.query.filter_by(registered='yes').count()
-    rsvpcount = Guest.query.filter_by(rsvp='yes').count()
+    rsvpcount = User.query.filter_by(rsvp='yes').count()
     return render_template('about.html', title='About', guestcount=guestcount, 
         usercount=usercount,rsvpcount=rsvpcount)
 
@@ -76,6 +77,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         send_verification_email(user, userid=user.id)
+        new_user_email(user)
         flash('Congratulations, you have created your account. Please check your \
             inbox (or spam folder) to verify your email address.')
         return redirect(url_for('login'))
@@ -308,38 +310,40 @@ def socialLinks(userid):
 @app.route('/edit/reset/<userid>', methods=['GET','POST'])
 @login_required
 def resetProfile(userid):
-    user = User.query.filter_by(id=userid).first_or_404()
-    guestToReset= Guest.query.filter_by(email=user.email).first()
+    usertoreset = User.query.filter_by(id=userid).first_or_404()
+    guestToReset= Guest.query.filter_by(email=usertoreset.email).first()
+    email=usertoreset.email
     form = EmptyForm()
-    if user.id == current_user.id or current_user.role=='admin':
-        if user:
-            user.name = ''
-            user.section = ''
-            user.rsvp = 'Not yet'
-            if user.role == 'admin':
-                user.role = 'admin'   
+    if usertoreset.id == current_user.id or current_user.role=='admin':
+        if usertoreset:
+            usertoreset.name = ''
+            usertoreset.section = ''
+            usertoreset.rsvp = 'Not yet'
+            if usertoreset.role == 'admin':
+                usertoreset.role = 'admin'   
             else:
-                user.role = ''   
+                usertoreset.role = ''   
             if guestToReset: 
                 guestToReset.email = None
                 guestToReset.registered = 'no'
                 guestToReset.rsvp = 'Not yet'
-            user.currentlocation = ''
-            user.facebook = ''
-            user.twitter = ''
-            user.instagram = ''
-            user.linkedin = ''
-            user.snapchat = ''
-            user.reddit = ''
-            user.mastodon = ''
-            user.tiktok = ''
+            usertoreset.currentlocation = ''
+            usertoreset.facebook = ''
+            usertoreset.twitter = ''
+            usertoreset.instagram = ''
+            usertoreset.linkedin = ''
+            usertoreset.snapchat = ''
+            usertoreset.reddit = ''
+            usertoreset.mastodon = ''
+            usertoreset.tiktok = ''
         if guestToReset:
-            guestToReset.name = None
-            guestToReset.section = None
             guestToReset.email = None
             guestToReset.registered = 'no'
             guestToReset.rsvp = 'Not yet'
         db.session.commit()
+        profile_reset_email(email=usertoreset.email, userid=usertoreset.id)
+        flash("Your profile was reset.")
+        return redirect(url_for('user', userid=userid))
         if current_user.id == 'admin':
             return redirect(url_for('adminusermanagement'))
         else:
@@ -347,6 +351,7 @@ def resetProfile(userid):
     else:
         flash("You can't edit someone else's profile!")
         return redirect(url_for('user', userid=current_user.id))
+
 
 # Validation of uploaded photo
 def validate_image(stream):
@@ -398,11 +403,13 @@ def rsvp(userid):
                 if form.rsvp.data == 'Yes, I plan to be there' or form.rsvp.data=='Yes, I will be there':
                     user.rsvp = 'yes'
                     db.session.commit()
+                    new_rsvp_email(user=user)
                     flash("Thank you for RSVP'ing")
                     return redirect(url_for('user', userid=userid))
                 else: 
                     user.rsvp = 'no'
                     db.session.commit()
+                    new_rsvp_email(user=user)
                     flash("Thank you for RSVP'ing")
                     return redirect(url_for('user', userid=userid))
                 return redirect(url_for('user', userid=userid))
@@ -413,12 +420,14 @@ def rsvp(userid):
                     user.rsvp = 'yes'
                     guest.rsvp = 'yes'
                     db.session.commit()
+                    new_rsvp_email(user=user)
                     flash("Thank you for RSVP'ing")
                     return redirect(url_for('user', userid=userid))
                 else: 
                     user.rsvp = 'no'
                     guest.rsvp = 'no'
                     db.session.commit()
+                    new_rsvp_email(user=user)
                     flash("Thank you for RSVP'ing")
                     return redirect(url_for('user', userid=userid))
                 return redirect(url_for('user', userid=userid))
@@ -644,8 +653,6 @@ def resetGuest(guestid):
     usertoreset = User.query.filter_by(email = guesttoreset.email).first()
     if current_user.role == 'admin':
         if guesttoreset:
-            guesttoreset.name = None
-            guesttoreset.section = None
             guesttoreset.email = None
             guesttoreset.registered = 'no'
             guesttoreset.rsvp = 'Not yet'

@@ -1,0 +1,9 @@
+Hello,
+
+Your profile was reset. visit the website to complete it:
+
+{{ url_for('user', userid=userid, _external=True) }}
+
+Sincerely,
+
+The EEB2 Reunion Team
