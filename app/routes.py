@@ -2,7 +2,7 @@ import os
 import imghdr
 from app import app, db
 from werkzeug.urls import url_parse
-from flask import render_template, flash, redirect, url_for, request, abort
+from flask import render_template, flash, redirect, url_for, request, abort, Response
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
 from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSocialLinksForm
@@ -14,6 +14,8 @@ from flask_wtf.file import FileField
 from app.email import send_password_reset_email, send_verification_email, send_contact_email
 from app.email import send_invite_email, new_user_email, profile_reset_email
 from app.email import new_rsvp_email
+
+
 #
 # PAGES ------------------------------------------------------------------------
 #
