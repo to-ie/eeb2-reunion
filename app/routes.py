@@ -7,14 +7,14 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm, RegistrationForm, AddSectionForm, EmptyForm, AddGuestForm
 from app.forms import selectRoleForm, selectSectionForm, selectNameForm, editSocialLinksForm
 from app.forms import nameOther, ProfilePictureForm, selectLocationForm
-from app.forms import ResetPasswordRequestForm
+from app.forms import ResetPasswordRequestForm, rsvpForm
 from app.forms import ResetPasswordForm, contactForm, inviteForm
 from app.models import User, Guest, Section
 from flask_wtf.file import FileField
 from app.email import send_password_reset_email, send_verification_email, send_contact_email, send_invite_email
 
 #
-# PAGES
+# PAGES ------------------------------------------------------------------------
 #
 
 @app.route('/')
@@ -22,9 +22,9 @@ from app.email import send_password_reset_email, send_verification_email, send_c
 def index():
     guestcount = Guest.query.count()
     usercount = Guest.query.filter_by(registered='yes').count()
-    rsvpcount = Guest.query.filter_by(rsvp='yes').count()
+    rsvpcount = User.query.filter_by(rsvp='yes').count()
     return render_template('index.html', title='Home',guestcount=guestcount, 
-        usercount=usercount,rsvpcount=rsvpcount)
+        usercount=usercount, rsvpcount=rsvpcount)
 
 @app.route('/about')
 @login_required
@@ -36,7 +36,7 @@ def about():
         usercount=usercount,rsvpcount=rsvpcount)
 
 #
-# LOGIN
+# LOGIN ------------------------------------------------------------------------
 #
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -50,7 +50,8 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         if user.verified != 'yes':
-            flash('Please confirm your account. Check your inbox (or spam folder) for the verification email.')
+            flash('Please confirm your account. Check your inbox (or spam folder)\
+                 for the verification email.')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('user',userid=current_user.id))
@@ -64,16 +65,19 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        flash('You are already registered.')
+        return redirect(url_for('user', userid=current_user.id))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.email.data.lower(), name="", section="", email=form.email.data.lower(), 
+        user = User(username=form.email.data.lower(), name="", section="", 
+                    email=form.email.data.lower(), 
             role="",rsvp="Not yet", currentlocation="", verified='no')
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         send_verification_email(user, userid=user.id)
-        flash('Congratulations, you have created your account. Please check your inbox (or spam folder) to verify your email address.')
+        flash('Congratulations, you have created your account. Please check your \
+            inbox (or spam folder) to verify your email address.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -86,7 +90,8 @@ def reset_password_request():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             send_password_reset_email(user)
-        flash('If the account exists, we have sent you the instructions to reset your password. Check your emails.')
+        flash('If the account exists, we have sent you the instructions to reset \
+            your password. Check your emails.')
         return redirect(url_for('login'))
     return render_template('reset_password_request.html',
                            title='Reset Password', form=form)
@@ -146,7 +151,7 @@ def contact():
 
 
 #
-# USER PRIVATE
+# USER PRIVATE -----------------------------------------------------------------
 #
 
 @app.route('/user/<userid>', methods=['GET'])
@@ -158,11 +163,13 @@ def user(userid):
         if guest is None and user.id == current_user.id:
             return render_template('profile.html', user=user, userid=userid)
         elif user.id == current_user.id :
-            return render_template('profile.html', user=user, userid=userid, guestid = guest.id)
+            return render_template('profile.html', user=user, userid=userid, 
+                guestid = guest.id)
         elif guest is None and current_user.role == 'admin':
             return render_template('profile.html', user=user, userid=userid)
         elif current_user.role == 'admin' :
-            return render_template('profile.html', user=user, userid=userid, guestid = guest.id)
+            return render_template('profile.html', user=user, userid=userid, 
+                guestid = guest.id)
         else:
             flash("You don't have permission to access this profile.")
             return redirect(url_for('user', userid=current_user.id))      
@@ -305,26 +312,33 @@ def resetProfile(userid):
     guestToReset= Guest.query.filter_by(email=user.email).first()
     form = EmptyForm()
     if user.id == current_user.id or current_user.role=='admin':
-        user.name = ''
-        user.section = ''
-        user.rsvp = 'Not yet'
-        if user.role == 'admin':
-            user.role = 'admin'   
-        else:
-            user.role = ''   
-        if guestToReset: 
+        if user:
+            user.name = ''
+            user.section = ''
+            user.rsvp = 'Not yet'
+            if user.role == 'admin':
+                user.role = 'admin'   
+            else:
+                user.role = ''   
+            if guestToReset: 
+                guestToReset.email = None
+                guestToReset.registered = 'no'
+                guestToReset.rsvp = 'Not yet'
+            user.currentlocation = ''
+            user.facebook = ''
+            user.twitter = ''
+            user.instagram = ''
+            user.linkedin = ''
+            user.snapchat = ''
+            user.reddit = ''
+            user.mastodon = ''
+            user.tiktok = ''
+        if guestToReset:
+            guestToReset.name = None
+            guestToReset.section = None
             guestToReset.email = None
             guestToReset.registered = 'no'
             guestToReset.rsvp = 'Not yet'
-        user.currentlocation = ''
-        user.facebook = ''
-        user.twitter = ''
-        user.instagram = ''
-        user.linkedin = ''
-        user.snapchat = ''
-        user.reddit = ''
-        user.mastodon = ''
-        user.tiktok = ''
         db.session.commit()
         if current_user.id == 'admin':
             return redirect(url_for('adminusermanagement'))
@@ -360,14 +374,63 @@ def upload_files(userid):
             if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
                     file_ext != validate_image(uploaded_file.stream):
                 return "Invalid image", 400
-            uploaded_file.save(os.path.join(basedir, app.config['UPLOAD_PATH'], current_user.get_id()+file_ext))
+            uploaded_file.save(os.path.join(basedir, app.config['UPLOAD_PATH'], 
+                userid+file_ext))
             user.avatar = userid+file_ext
             db.session.commit()
         return redirect(url_for('user', userid=userid))
     return render_template('profile-picture.html', userid=userid, form = form)
 
+
+@app.route('/rsvp/<userid>', methods=['GET', 'POST'])
+@login_required
+def rsvp(userid):
+    user = User.query.filter_by(id=userid).first_or_404()
+    guest = Guest.query.filter_by(email=user.email).first()
+    form = rsvpForm()
+
+    if user.id == current_user.id or current_user.role=='admin':
+        if user.name is None:
+            flash("We need a bit more info fro you first.")
+            return redirect(url_for('selectrole', userid=userid))    
+        elif guest is None:
+            if form.validate_on_submit():
+                if form.rsvp.data == 'Yes, I plan to be there' or form.rsvp.data=='Yes, I will be there':
+                    user.rsvp = 'yes'
+                    db.session.commit()
+                    flash("Thank you for RSVP'ing")
+                    return redirect(url_for('user', userid=userid))
+                else: 
+                    user.rsvp = 'no'
+                    db.session.commit()
+                    flash("Thank you for RSVP'ing")
+                    return redirect(url_for('user', userid=userid))
+                return redirect(url_for('user', userid=userid))
+            return render_template('rsvp.html', user=user, form=form)
+        else: 
+            if form.validate_on_submit():
+                if form.rsvp.data == 'Yes, I plan to be there' or form.rsvp.data=='Yes, I will be there':
+                    user.rsvp = 'yes'
+                    guest.rsvp = 'yes'
+                    db.session.commit()
+                    flash("Thank you for RSVP'ing")
+                    return redirect(url_for('user', userid=userid))
+                else: 
+                    user.rsvp = 'no'
+                    guest.rsvp = 'no'
+                    db.session.commit()
+                    flash("Thank you for RSVP'ing")
+                    return redirect(url_for('user', userid=userid))
+                return redirect(url_for('user', userid=userid))
+            return render_template('rsvp.html', user=user, form=form)
+    else:
+        flash("You can't edit someone else's rsvp!")
+        return redirect(url_for('user', userid=current_user.id))
+
+    return render_template('rsvp.html', userid=userid, form = form)
+
 #
-# PUBLIC
+# PUBLIC -----------------------------------------------------------------------
 # 
 
 @app.route('/public/<guestid>', methods=['GET'])
@@ -426,7 +489,7 @@ def memory_lane():
 
 
 #
-# ADMIN
+# ADMIN ------------------------------------------------------------------------
 #
 
 @app.route('/admin/users', methods=['GET'])
@@ -438,6 +501,17 @@ def adminusermanagement():
         flash('This is a restricted area.')
         return redirect(url_for('index'))
     return render_template("user_management.html", title='User management', 
+        users=users)
+
+@app.route('/admin/rsvp', methods=['GET'])
+@login_required
+def adminrsvpmanagement():
+    if current_user.role == 'admin':
+        users = User.query.filter(User.rsvp.in_(('yes', 'no'))).order_by(User.id.asc())
+    else: 
+        flash('This is a restricted area.')
+        return redirect(url_for('index'))
+    return render_template("rsvp_management.html", title='User management', 
         users=users)
 
 @app.route('/admin/toggleadmin/<userid>', methods=['GET', 'POST'])
@@ -545,7 +619,8 @@ def adminguestmanagement():
 
         form = AddGuestForm()
         if form.validate_on_submit():
-            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper(), registered="no", rsvp="Not yet")
+            g = Guest(name=form.guestname.data.title(), section=form.section.data.upper(), 
+                registered="no", rsvp="Not yet")
             gv = Guest.query.filter_by(name=g.name).first()
             if gv is not None:
                 flash('Guest already exists')
@@ -558,8 +633,8 @@ def adminguestmanagement():
     else: 
         flash('This is a restricted area.')
         return redirect(url_for('index'))
-    return render_template("guest_management.html", title='Guest list management', guests=guests, 
-        friends=friends, teachers=teachers, others=others, form=form)
+    return render_template("guest_management.html", title='Guest list management', 
+        guests=guests, friends=friends, teachers=teachers, others=others, form=form)
 
 @app.route('/edit/reset/guest/<guestid>', methods=['GET','POST'])
 @login_required
@@ -568,9 +643,12 @@ def resetGuest(guestid):
     guesttoreset = Guest.query.filter_by(id=guestid).first()
     usertoreset = User.query.filter_by(email = guesttoreset.email).first()
     if current_user.role == 'admin':
-        guesttoreset.email = None
-        guesttoreset.registered = 'no'
-        guesttoreset.rsvp = 'Not yet'
+        if guesttoreset:
+            guesttoreset.name = None
+            guesttoreset.section = None
+            guesttoreset.email = None
+            guesttoreset.registered = 'no'
+            guesttoreset.rsvp = 'Not yet'
         if usertoreset: 
             usertoreset.name = ''
             usertoreset.section = ''

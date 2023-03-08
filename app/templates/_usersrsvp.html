@@ -1,0 +1,14 @@
+<tr>
+    <td>{{ user.id }}</td>
+    <td>{{ user.name }}</td>
+    <td>{{ user.section }}</td>
+    {% if user.verified == 'yes' %}
+    <td>{{ user.email }}</td>
+    {% else %}
+    <td>{{ user.email }} <a href="{{ url_for('toggleverify', userid=user.id) }}"><span class="badge rounded-pill bg-danger">not verified</span></a></td>
+    {% endif%}
+    <td>{{ user.currentlocation }}</td>
+    <td>{{ user.role }}</td>
+    <td>{{ user.rsvp }}</td>
+        <td class="aligniconsright"><a class="nolinkdecoration" href="{{ url_for('rsvp', userid = user.id) }}">✏️</a></td>
+</tr>

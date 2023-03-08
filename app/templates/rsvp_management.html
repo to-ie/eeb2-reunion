@@ -3,13 +3,13 @@
 {% block content %}
 
 <div class="title">
-    <h1>User management</h1>
+    <h1>RSVP management</h1>
 </div>
 <br>
 <br>
 
 
-<table id="usermanagementtable" class="table table-striped">
+<table id="rsvpmanagementtable" class="table table-striped">
   <thead>
     <tr>
         <th>Id</th>
@@ -24,7 +24,7 @@
   </thead>
   <tbody>
     {% for user in users %}
-        {% include '_users.html' %}
+        {% include '_usersrsvp.html' %}
     {% endfor %}
   </tbody>
 </table>
@@ -34,7 +34,7 @@
 {% block scripts %}
   <script>
     $(document).ready(function () {
-      $('#usermanagementtable').DataTable({
+      $('#rsvpmanagementtable').DataTable({
         columns: [
           {orderable: false, searchable: false},
           null,

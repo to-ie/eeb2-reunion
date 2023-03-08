@@ -346,7 +346,7 @@ h4 {
 
 .socialinput{
     width: 49%;
-    display: inline-block;
+    display: -webkit-inline-box;
     padding: 7px 12px;
 }
 

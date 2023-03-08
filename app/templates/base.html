@@ -38,7 +38,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('user', userid=current_user.id) }}">Your profile</a></li>
                             <li><a class="dropdown-item" href="/about">About the event</a></li>
-                            <li><a class="dropdown-item" href="#">RSVP</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('rsvp', userid=current_user.id) }}">RSVP</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('reconnect') }}">Reconnect</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('memory_lane') }}">Down memory lane</a></li>
                             {% if current_user.role == "admin" %}
@@ -47,7 +47,7 @@
                             <li><a class="dropdown-item" href="{{ url_for('adminusermanagement') }}">User management</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('adminguestmanagement') }}">Guest list management</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('adminsectionmanagement') }}">Sections management</a></li>
-                            <li><a class="dropdown-item" href="#">RSVPs management</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('adminrsvpmanagement') }}">RSVPs management</a></li>
                             {% else %}
                             {% endif %}
                             <li><hr class="dropdown-divider"></li>

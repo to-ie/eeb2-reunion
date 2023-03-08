@@ -46,7 +46,7 @@
                         <hr>
                         <b>RSVP'ed:</b> {{ user.rsvp }}
                         <br>
-                        <p><a href="#" class="nolinkdecoration align-right edit-rsvp">✏️</a></p>
+                        <p><a href="{{url_for('rsvp', userid=userid) }}" class="nolinkdecoration align-right edit-rsvp">✏️</a></p>
 
                         <hr>
                         <div class="editsociallinks align-items-end">
@@ -138,7 +138,9 @@
     <div class="col-5">
         <div class="alert alert-secondary">
             <h2>RSVP</h2>
-            <p>We're still in the process of organising the event. RSVPs are not currently available. Be sure to check back here soon though!</p>
+            <p>We're still in the process of organising the event. You can still RSVP but you might need to update it when the details of the event are announced. We will let you know when the time comes.</p>
+          <a class="btn btn-dark" href="{{ url_for('rsvp', userid=current_user.id) }}" role="button">Update your RSVP</a>
+            
         </div>
         {% if user.role == 'I graduated in 2005' %}
         <div>

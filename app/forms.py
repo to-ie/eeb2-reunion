@@ -30,7 +30,7 @@ class RegistrationForm(FlaskForm):
 
 class AddSectionForm(FlaskForm):
     sectioninput = StringField('', validators=[DataRequired()])
-    submit = SubmitField('Add section')
+    submit = SubmitField('Add')
 
     def validate_sectioninput(self, sectioninput):
         sq = Section.query.filter_by(section=sectioninput.data.upper()).first()
@@ -127,3 +127,9 @@ class inviteForm(FlaskForm):
     email = StringField('Email address', validators=[DataRequired(), Email()])
     captcha = StringField(validators=[DataRequired()])
     submit = SubmitField('Send the invite')
+
+class rsvpForm(FlaskForm):
+    rsvp = SelectField(u'', choices = [(''),('Yes, I plan to be there'),
+        ('Yes, I will be there'),("No, I won't be there")], validators = [DataRequired()])
+    submit = SubmitField('Save')
+
