@@ -114,6 +114,15 @@ Set Debug mode:
 export FLASK_DEBUG=1
 ```
 
+Update app:
+```
+(venv) $ git pull                              # download the new version
+(venv) $ sudo supervisorctl stop reunion       # stop the current server
+(venv) $ flask db upgrade                      # upgrade the database
+(venv) $ flask translate compile               # upgrade the translations
+(venv) $ sudo supervisorctl start reunion      # start a new server
+```
+
 
 **Other:** 
 * [ ] Organise the event (who?)

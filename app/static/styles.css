@@ -381,3 +381,164 @@ h4 {
     line-height: 2px;
 }
 
+/*MOBILE ---------------------------------------------------------------------*/
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+
+    /*  Homepage*/
+    .bd-example {
+        padding: 10px 35px !important;
+    }
+
+    h1{
+        margin: 0 !important;
+        font-size: 50px !important;
+        line-height: 55px !important;
+    }
+
+    h4{
+        margin-bottom: 10px !important;
+    }
+
+    .homepage-images img{
+        width: 47% !important;
+        margin-bottom: -40px;
+    }
+
+    .homepage-band{
+        margin-top: 0px;
+    }
+
+    .band-content {
+        display: inline;
+    }
+
+    .band-title {
+        width: 100%;
+        text-align: center;
+    }
+
+    .band-stats {
+        display: inline;
+        text-align: center;
+    }
+
+    .row{
+        display: inline !important;
+    }
+
+
+    .col-6 {
+        width: 100% !important;
+    }
+
+    .col-5 {
+        width: 100% !important;
+    }
+
+    .col-5 img{
+        margin: 25px 0px;
+    }
+
+    .tick, .unchecked {
+        height: auto !important;
+    }
+
+    .homepage-about {
+        padding: 0;
+    }
+
+    .homepage-help{
+        margin-top: -55px;
+    }
+
+    .spread-ways {
+        width: auto;
+        border-bottom-style: none;
+        margin-right: 0;
+        border-width: 0;
+        text-align: center;
+    }
+
+    .homepage-whatsapp {
+        padding: 0;
+    }
+
+    .a2a_kit{
+        width: 100%;
+    }
+
+    .whatsapp {
+        text-align: center;
+    }
+
+    .whatsapp-logo{
+        margin: 0 40%;
+    }
+
+
+/*  Login*/
+
+    .login-form {
+        width: 100%;
+    }
+
+    .login-buttons{
+        flex-basis: 100%;
+        flex-grow: 1;
+    }
+
+    .navbar-nav{
+        position: absolute !important;
+        top: 10px !important;
+        right: 10px !important;
+        z-index: 100;
+    }
+    
+    .dropdown-toggle {
+      text-align: right !important;
+    }
+
+    .title h1{
+        margin-bottom: 0 !important;
+
+    }
+
+    .title h4{
+        padding-top: 0 !important;
+
+    }
+
+    .col-7 {
+        width: 100% !important;
+    }
+
+    .alert{
+        margin-top: 20px;
+    }
+
+    .socialinput {
+        width: 100%;
+    }
+
+    .col-8, .col-4{
+        width: 100% !important;
+    }
+
+    .col-8 iframe {
+        width: 100%;
+    }
+
+    .col-sm-12{
+        overflow: auto;
+    }
+
+    .bacbookcard, .cardshpops{
+        width: 100% !important;
+        margin-bottom: 20px ;
+    }
+
+    .alert{
+        width: 100% !important;
+    }
