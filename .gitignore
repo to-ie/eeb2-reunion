@@ -2,6 +2,7 @@
 
 # ignore ALL .log files
 *.log
+.env
 
 config.py
 /config.py
