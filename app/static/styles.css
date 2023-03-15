@@ -92,6 +92,13 @@ h4 {
     margin-left: 15px;
 }
 
+.explain{
+    font-size: 11px;
+    color: #1e1e1e66;
+    margin-bottom: 0 !important;
+    line-height: 18px;
+}
+
 /*HOMEPAGE*/
 
 .title{

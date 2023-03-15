@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="title">
+        <h1>Check your inbox</h1>
+        <h4>Your account has been created. <br>Please check your inbox (or spam folder) to verify your email address.</h4> 
+    </h4>
+    </div>
+
+    <div class="container text-center"> 
+        <img src="/static/img/letter.gif" width="120px">
+        <br>
+        <br>
+        <p><a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('contact') }}">get in touch</a>.</p>
+    </div>  
+{% endblock %}

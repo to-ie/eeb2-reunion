@@ -80,10 +80,14 @@ def register():
         db.session.commit()
         send_verification_email(user, userid=user.id)
         new_user_email(user)
-        flash('Congratulations, you have created your account. Please check your \
-            inbox (or spam folder) to verify your email address.')
-        return redirect(url_for('login'))
+        return redirect(url_for('confirmation'))
     return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/confirmation', methods=['GET'])
+def confirmation():
+    return render_template('confirmation.html', title='Confirmation')
+
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
